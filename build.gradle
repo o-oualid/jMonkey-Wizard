@@ -1,0 +1,21 @@
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+
+    }
+}
+repositories {
+    mavenCentral()
+    jcenter()
+
+}
+
+dependencies {
+
+}
