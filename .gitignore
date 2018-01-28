@@ -5,3 +5,6 @@
 /.gradle
 /out
 /idea
+*.xml
+
+\.idea/
