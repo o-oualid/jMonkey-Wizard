@@ -3,7 +3,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '27.0.2'
     defaultConfig {
-        applicationId 'com.jme.game'
+        applicationId '${package}'
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1

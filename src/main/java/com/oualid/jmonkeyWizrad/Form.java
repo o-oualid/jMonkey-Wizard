@@ -5,9 +5,14 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -26,37 +31,39 @@ import javax.swing.filechooser.FileSystemView;
  */
 
 class Form {
+    public JPanel mainPanel;
     private JRadioButton bullet;
     private JRadioButton jBullet;
+    private JRadioButton jogl;
+    private JRadioButton lwjgl;
+    private JRadioButton lwjgl3;
     private JCheckBox jogg;
     private JCheckBox plugins;
-    public JPanel mainPanel;
     private JCheckBox android;
     private JCheckBox desktop;
     private JCheckBox ios;
     private JCheckBox vr;
-    private JTextField myGameTextField;
-    private JButton buildProjectButton;
-    private JProgressBar progressBar1;
-    private JCheckBox niftyGUI;
-    private JButton browseButton;
     private JCheckBox terrain;
     private JCheckBox effects;
     private JCheckBox blender;
-    private JRadioButton jogl;
+    private JCheckBox niftyGUI;
     private JCheckBox examples;
+    private JCheckBox networking;
+    private JTextField myGameTextField;
     private JTextField jmeVersion;
-    private JComboBox jmeRelease;
     private JTextField directory;
     private JTextField gamePackage;
-    private JCheckBox networking;
-    private JRadioButton LWJGLRadioButton;
-    private JRadioButton LWJGL3RadioButton;
+    private JButton buildProjectButton;
+    private JButton browseButton;
+    private JComboBox jmeRelease;
+    private JProgressBar progressBar1;
+
+
     private BufferedWriter bw = null;
     private BufferedReader br = null;
     private FileWriter fw = null;
     private FileReader fr = null;
-    private HashMap<String, String> specialWords = new HashMap();
+    private HashMap<String, String> specialWords = new HashMap<>();
     private String coreDependencies, desktopDependencies, androidDependencies, iosDependencies, vrDependencies;
 
     Form() {
@@ -83,13 +90,13 @@ class Form {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(jBullet.isSelected()&& bullet.isSelected()){
-
-                    JOptionPane.showMessageDialog(null, "you can't select Bullet and jBullet at the same time");
-                }else if (blender.isSelected()&&(android.isSelected()|| ios.isSelected()|| vr.isSelected())){
-                    JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop");
-                }else {
-                    buildProject();
+                if (isSelectedOk()) {
+                    try {
+                        buildProject();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null,"the build is done");
                 }
             }
 
@@ -97,11 +104,13 @@ class Form {
 
     }
 
-    private void buildProject() {
-
+    private void buildProject() throws IOException {
+        String modules="";
         specialWords.put("package", gamePackage.getText());
         File projectDir = new File(directory.getText() + "\\" + myGameTextField.getText());
         projectDir.mkdir(); //the project folder
+        File gradleDir=new File(projectDir.getPath()+"\\gradle\\wrapper");
+        gradleDir.mkdirs();
         File assetsDir = new File(projectDir.getPath() + "\\assets");
         assetsDir.mkdir(); //assets folder
         // sub assets folders
@@ -121,6 +130,9 @@ class Form {
         createFile(javaDir, "Main.java", "template/core/Main.java");
         // add the necessary dependency to all modules
         coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
+        // make gradle warrper files
+        createFile(gradleDir,"gradle-wrapper.properties","template/gradle/wrapper/gradle-wrapper.properties");
+        copyFile("template/gradle/wrapper/gradle-wrapper.jar",gradleDir+"/gradle-wrapper.jar");
 
         // if the desktop is selected create desktop module files and folders
         if (desktop.isSelected()) {
@@ -143,8 +155,18 @@ class Form {
                     "\t\tdependencies {\n" +
                     "\t\t\tcompile project(\":core\")\n" +
                     "\t\t\tcompile \"org.junit.platform:junit-platform-launcher:$junitPlatform_version\"\n" +
-                    "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n" +
-                    "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
+                    "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n";
+            if (lwjgl3.isSelected()) {
+                desktopDependencies = desktopDependencies +
+                        "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
+            } else if (lwjgl.isSelected()) {
+                desktopDependencies = desktopDependencies +
+                        "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl:$JMonkey_version\"\n";
+            } else if (jogl.isSelected()) {
+                desktopDependencies = desktopDependencies +
+                        "\t\t\tcompile \"org.jmonkeyengine:jme3-jogl:$JMonkey_version\"\n";
+            }
+
 
         }
         // if the android checkBox is selected create android module files and folders
@@ -205,43 +227,51 @@ class Form {
         // if module is selected add his dependencies to gradle build file
         if (android.isSelected()) {
             specialWords.put("androidDependencies", androidDependencies + "\n\t}\n}");
+            modules=modules+", 'android'";
         } else {
             specialWords.put("androidDependencies", "");
         }
         if (desktop.isSelected()) {
             specialWords.put("desktopDependencies", desktopDependencies + "\n\t}\n}");
+            modules=modules+", 'desktop'";
         } else {
             specialWords.put("desktopDependencies", "");
         }
         if (ios.isSelected()) {
             specialWords.put("iosDependencies", iosDependencies + "\n\t}\n}");
+            modules=modules+", 'ios'";
         } else {
             specialWords.put("iosDependencies", "");
         }
         if (vr.isSelected()) {
             specialWords.put("vrDependencies", vrDependencies + "\n\t}\n}");
+            modules=modules+", 'vr'";
         } else {
             specialWords.put("vrDependencies", "");
         }
+
         specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getModel().getSelectedItem());
         createFile(projectDir, "build.gradle", "template/build.gradle");
+        newFile(projectDir,"settings.gradle",
+                "include 'core','assets'"+modules);
     }
 
     private void addDependencies() {
 
         if (bullet.isSelected()) {
+            desktopDependencies = desktopDependencies +
+                    "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native:$JMonkey_version\"\n";
             androidDependencies = androidDependencies +
-                    "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"";
-        }
-        if (jBullet.isSelected()) {
+                    "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"\n";
+            coreDependencies = coreDependencies +
+                    "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet:$JMonkey_version\"\n";
+        } else if (jBullet.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-jbullet:$JMonkey_version\"\n";
-
         }
         if (terrain.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-terrain:$JMonkey_version\"\n";
-
         }
         if (niftyGUI.isSelected()) {
             coreDependencies = coreDependencies +
@@ -267,66 +297,117 @@ class Form {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-jogg:$JMonkey_version\"\n";
         }
-        if (jogl.isSelected()) {
+        if (networking.isSelected()) {
             coreDependencies = coreDependencies +
-                    "\t\t\tcompile \"org.jmonkeyengine:jme3-jogl:$JMonkey_version\"\n";
-
+                    "\t\t\tcompile \"org.jmonkeyengine:jme3-networking:$JMonkey_version\"\n";
         }
         if (examples.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-examples:$JMonkey_version\"\n";
         }
     }
-// this method create files using templates
-    private void createFile(File path, String name, String tmp) {
-        File mainClass = new File(path.getPath() + "\\" + name);
-        String mainClassTmp = "";
+
+    // this method create files using templates
+    private void createFile(File path, String name, String tmpPath) {
+        String tempContent = "";
         try {
-            mainClass.createNewFile();
-            fr = new FileReader(tmp);
+            fr = new FileReader(tmpPath);
             br = new BufferedReader(fr);
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
-                if (mainClassTmp.isEmpty()) {
-                    mainClassTmp = sCurrentLine;
+                if (tempContent.isEmpty()) {
+                    tempContent = sCurrentLine;
                 } else {
-                    mainClassTmp = mainClassTmp + "\n" + sCurrentLine;
+                    tempContent = tempContent + "\n" + sCurrentLine;
                 }
             }
             for (String key : specialWords.keySet()) {
-                mainClassTmp = mainClassTmp.replace("${" + key + "}", specialWords.get(key));
+                tempContent = tempContent.replace("${" + key + "}", specialWords.get(key));
             }
-            fw = new FileWriter(mainClass.getAbsolutePath());
-            bw = new BufferedWriter(fw);
-            bw.write(mainClassTmp);
+            if (!newFile(path,name,tempContent)){
+                JOptionPane.showMessageDialog(null,
+                        "Failed tp create file: "+path+"/"+name+"\n this generally happen when the file is already exist!");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (bw != null)
-                    bw.close();
-
-                if (fw != null)
-                    fw.close();
-
-                if (br != null) {
-                    br.close();
-                }
-                if (fr != null) {
-                    fr.close();
-                }
-                bw = null;
-                fw = null;
-                br = null;
-                fr = null;
-            } catch (IOException ex) {
-
-                ex.printStackTrace();
-
-            }
-
+          closeFile();
         }
-
     }
 
+    //this method create files using String
+
+    private boolean newFile(File path,String name,String content){
+        File mainClass = new File(path.getPath() + "\\" + name);
+        try {
+            if (!mainClass.createNewFile()){
+             return false;
+            }
+            fw = new FileWriter(mainClass.getAbsolutePath());
+            bw = new BufferedWriter(fw);
+            bw.write(content);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeFile();
+        }
+    }
+
+    // close the opened file
+    private void closeFile(){
+        try {
+            if (bw != null)
+                bw.close();
+
+            if (fw != null)
+                fw.close();
+
+            if (br != null) {
+                br.close();
+            }
+            if (fr != null) {
+                fr.close();
+            }
+            bw = null;
+            fw = null;
+            br = null;
+            fr = null;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /*
+     *if the selected modules are compatible withe all the dependencies it will return true
+     * if not show an alert to the user
+     */
+    private boolean isSelectedOk() {
+        if (blender.isSelected() && (android.isSelected() || ios.isSelected() || vr.isSelected())) {
+            JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop");
+            return false;
+        } else if (bullet.isSelected() && (ios.isSelected() || vr.isSelected())) {
+            JOptionPane.showMessageDialog(null, "Native Bullet is not compatible with Ios and VR\n use JBullet instead");
+            return false;
+        } else {
+            return true;
+        }
+    }
+    private static void copyFile(String source, String dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(new File(source));
+            os = new FileOutputStream(new File(dest));
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
+        }
+    }
 }

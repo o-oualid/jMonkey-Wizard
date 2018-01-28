@@ -279,20 +279,6 @@
               <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>
-          <component id="a4ac2" class="javax.swing.JCheckBox" binding="blender">
-            <constraints>
-              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-14145496"/>
-              <font/>
-              <foreground color="-1"/>
-              <inheritsPopupMenu value="false"/>
-              <selected value="true"/>
-              <text value="Blender"/>
-              <verifyInputWhenFocusTarget value="false"/>
-            </properties>
-          </component>
           <component id="6efd4" class="javax.swing.JCheckBox" binding="jogg">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -321,39 +307,7 @@
               <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>
-          <component id="c3c00" class="javax.swing.JCheckBox" binding="examples">
-            <constraints>
-              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-14145496"/>
-              <font/>
-              <foreground color="-1"/>
-              <hideActionText value="false"/>
-              <text value="Examples"/>
-            </properties>
-          </component>
-          <component id="c21cb" class="javax.swing.JRadioButton" binding="LWJGLRadioButton" default-binding="true">
-            <constraints>
-              <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
-              <text value="LWJGL"/>
-            </properties>
-          </component>
-          <component id="ec02b" class="javax.swing.JRadioButton" binding="jogl">
-            <constraints>
-              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
-              <text value="JOGL"/>
-            </properties>
-          </component>
-          <component id="ecc4c" class="javax.swing.JRadioButton" binding="LWJGL3RadioButton" default-binding="true">
+          <component id="ecc4c" class="javax.swing.JRadioButton" binding="lwjgl3">
             <constraints>
               <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -383,6 +337,53 @@
               <background color="-14145496"/>
               <foreground color="-1"/>
               <text value="Bullet"/>
+            </properties>
+          </component>
+          <component id="ec02b" class="javax.swing.JRadioButton" binding="jogl">
+            <constraints>
+              <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-14145496"/>
+              <foreground color="-1"/>
+              <text value="JOGL"/>
+            </properties>
+          </component>
+          <component id="c21cb" class="javax.swing.JRadioButton" binding="lwjgl">
+            <constraints>
+              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-14145496"/>
+              <foreground color="-1"/>
+              <text value="LWJGL"/>
+            </properties>
+          </component>
+          <component id="c3c00" class="javax.swing.JCheckBox" binding="examples">
+            <constraints>
+              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-14145496"/>
+              <font/>
+              <foreground color="-1"/>
+              <hideActionText value="false"/>
+              <text value="Examples"/>
+            </properties>
+          </component>
+          <component id="a4ac2" class="javax.swing.JCheckBox" binding="blender">
+            <constraints>
+              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-14145496"/>
+              <enabled value="true"/>
+              <font/>
+              <foreground color="-1"/>
+              <inheritsPopupMenu value="false"/>
+              <selected value="false"/>
+              <text value="Blender"/>
+              <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>
         </children>
