@@ -13,8 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
@@ -24,29 +26,32 @@ import javax.swing.filechooser.FileSystemView;
  */
 
 class Form {
-    private JCheckBox bulletCheckBox;
-    private JCheckBox JBulletCheckBox;
-    private JCheckBox JOGGCheckBox;
-    private JCheckBox pluginsCheckBox;
+    private JRadioButton bullet;
+    private JRadioButton jBullet;
+    private JCheckBox jogg;
+    private JCheckBox plugins;
     public JPanel mainPanel;
-    private JCheckBox androidCheckBox;
-    private JCheckBox desktopCheckBox;
-    private JCheckBox iosCheckBox;
-    private JCheckBox VRCheckBox;
+    private JCheckBox android;
+    private JCheckBox desktop;
+    private JCheckBox ios;
+    private JCheckBox vr;
     private JTextField myGameTextField;
     private JButton buildProjectButton;
     private JProgressBar progressBar1;
-    private JCheckBox niftyGUICheckBox;
+    private JCheckBox niftyGUI;
     private JButton browseButton;
-    private JCheckBox Terrain;
+    private JCheckBox terrain;
     private JCheckBox effects;
     private JCheckBox blender;
-    private JCheckBox jogl;
+    private JRadioButton jogl;
     private JCheckBox examples;
     private JTextField jmeVersion;
     private JComboBox jmeRelease;
     private JTextField directory;
     private JTextField gamePackage;
+    private JCheckBox networking;
+    private JRadioButton LWJGLRadioButton;
+    private JRadioButton LWJGL3RadioButton;
     private BufferedWriter bw = null;
     private BufferedReader br = null;
     private FileWriter fw = null;
@@ -78,9 +83,18 @@ class Form {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                buildProject();
+                if(jBullet.isSelected()&& bullet.isSelected()){
+
+                    JOptionPane.showMessageDialog(null, "you can't select Bullet and jBullet at the same time");
+                }else if (blender.isSelected()&&(android.isSelected()|| ios.isSelected()|| vr.isSelected())){
+                    JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop");
+                }else {
+                    buildProject();
+                }
             }
+
         });
+
     }
 
     private void buildProject() {
@@ -108,8 +122,8 @@ class Form {
         // add the necessary dependency to all modules
         coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
 
-        // if the desktopCheckBox is selected create desktop module files and folders
-        if (desktopCheckBox.isSelected()) {
+        // if the desktop is selected create desktop module files and folders
+        if (desktop.isSelected()) {
             File desktopDir = new File(projectDir.getPath() + "\\desktop");
             desktopDir.mkdir();
             File desktopJavaDir = new File(desktopDir.getPath() + "\\src\\java\\" + gamePackage.getText().replace(".", "\\"));
@@ -134,7 +148,7 @@ class Form {
 
         }
         // if the android checkBox is selected create android module files and folders
-        if (androidCheckBox.isSelected()) {
+        if (android.isSelected()) {
             File androidDir = new File(projectDir.getPath() + "\\android");
             androidDir.mkdir();
             File androidJavaDir = new File(androidDir.getPath() + "\\src\\java\\" + gamePackage.getText().replace(".", "\\"));
@@ -154,7 +168,7 @@ class Form {
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n";
         }
         // if the ios checkBox is selected create ios module files and folders
-        if (iosCheckBox.isSelected()) {
+        if (ios.isSelected()) {
             File iosDir = new File(projectDir.getPath() + "\\ios");
             iosDir.mkdir();
             File iosJavaDir = new File(iosDir.getPath() + "\\src\\java\\" + gamePackage.getText().replace(".", "\\"));
@@ -170,7 +184,7 @@ class Form {
 
         }
         // if the vr checkBox is selected create vr module files and folders
-        if (VRCheckBox.isSelected()) {
+        if (vr.isSelected()) {
             File vrDir = new File(projectDir.getPath() + "\\vr");
             vrDir.mkdir();
             File vrJavaDir = new File(vrDir.getPath() + "\\src\\java\\" + gamePackage.getText().replace(".", "\\"));
@@ -189,22 +203,22 @@ class Form {
 
         specialWords.put("coreDependencies", coreDependencies);
         // if module is selected add his dependencies to gradle build file
-        if (androidCheckBox.isSelected()) {
+        if (android.isSelected()) {
             specialWords.put("androidDependencies", androidDependencies + "\n\t}\n}");
         } else {
             specialWords.put("androidDependencies", "");
         }
-        if (desktopCheckBox.isSelected()) {
+        if (desktop.isSelected()) {
             specialWords.put("desktopDependencies", desktopDependencies + "\n\t}\n}");
         } else {
             specialWords.put("desktopDependencies", "");
         }
-        if (iosCheckBox.isSelected()) {
+        if (ios.isSelected()) {
             specialWords.put("iosDependencies", iosDependencies + "\n\t}\n}");
         } else {
             specialWords.put("iosDependencies", "");
         }
-        if (VRCheckBox.isSelected()) {
+        if (vr.isSelected()) {
             specialWords.put("vrDependencies", vrDependencies + "\n\t}\n}");
         } else {
             specialWords.put("vrDependencies", "");
@@ -215,21 +229,21 @@ class Form {
 
     private void addDependencies() {
 
-        if (bulletCheckBox.isSelected()) {
+        if (bullet.isSelected()) {
             androidDependencies = androidDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"";
         }
-        if (JBulletCheckBox.isSelected()) {
+        if (jBullet.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-jbullet:$JMonkey_version\"\n";
 
         }
-        if (Terrain.isSelected()) {
+        if (terrain.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-terrain:$JMonkey_version\"\n";
 
         }
-        if (niftyGUICheckBox.isSelected()) {
+        if (niftyGUI.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-niftygui:$JMonkey_version\"\n";
 
@@ -239,7 +253,7 @@ class Form {
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-effects:$JMonkey_version\"\n";
 
         }
-        if (pluginsCheckBox.isSelected()) {
+        if (plugins.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-plugins:$JMonkey_version\"\n";
 
@@ -249,7 +263,7 @@ class Form {
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-blender:$JMonkey_version\"\n";
 
         }
-        if (JOGGCheckBox.isSelected()) {
+        if (jogg.isSelected()) {
             coreDependencies = coreDependencies +
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-jogg:$JMonkey_version\"\n";
         }
