@@ -90,11 +90,13 @@ class Form {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (isSelectedOk()) {
+                    progressBar1.setValue(0);
                     try {
                         buildProject();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
+                    progressBar1.setValue(100);
                     JOptionPane.showMessageDialog(null,"the build is done");
                 }
             }
@@ -104,6 +106,7 @@ class Form {
     }
 
     private void buildProject() throws IOException {
+        progressBar1.setValue(10);
         String modules="";
         specialWords.put("package", gamePackage.getText());
         File projectDir = new File(directory.getText() + "\\" + myGameTextField.getText());
@@ -221,8 +224,9 @@ class Form {
                     "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n";
 
         }
+        progressBar1.setValue(50);
         addDependencies();// call add addDependencies method to add the selected dependencies
-
+        progressBar1.setValue(70);
         specialWords.put("coreDependencies", coreDependencies);
         // if module is selected add his dependencies to gradle build file
         if (android.isSelected()) {
@@ -254,6 +258,7 @@ class Form {
         createFile(projectDir, "build.gradle", "template/build.gradle");
         newFile(projectDir,"settings.gradle",
                 "include 'core','assets'"+modules);
+        progressBar1.setValue(90);
     }
 
     private void addDependencies() {

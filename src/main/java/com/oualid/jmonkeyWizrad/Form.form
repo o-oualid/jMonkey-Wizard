@@ -512,8 +512,9 @@
               <indeterminate value="false"/>
               <inheritsPopupMenu value="false"/>
               <orientation value="0"/>
-              <string value="100"/>
+              <string value=""/>
               <stringPainted value="false"/>
+              <value value="0"/>
               <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>
