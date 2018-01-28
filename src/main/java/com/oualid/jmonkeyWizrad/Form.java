@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -128,6 +127,7 @@ class Form {
         File javaDir = new File(coreDir.getPath() + "\\src\\java\\" + gamePackage.getText().replace(".", "\\"));// core java folder
         javaDir.mkdirs();
         createFile(javaDir, "Main.java", "template/core/Main.java");
+        createFile(coreDir, "build.gradle", "template/desktop/build.gradle");
         // add the necessary dependency to all modules
         coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
         // make gradle warrper files
