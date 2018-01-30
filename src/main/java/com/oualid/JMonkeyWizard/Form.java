@@ -29,6 +29,16 @@ import javax.swing.filechooser.FileSystemView;
  * Created by: ouazrou-oualid on: 26/01/2018 package: com.oualid.jmonkeyWizrad project: JMonkey Wizard.
  */
 
+/*
+ * ${gameName} for the game name
+ * ${package} for the game package
+ * ${coreDependencies}
+ * ${desktopDependencies}
+ * ${androidDependencies}
+ * ${iosDependencies}
+ * ${vrDependencies}
+ */
+
 class Form {
     public JPanel mainPanel;
     private JRadioButton bullet;
@@ -48,16 +58,14 @@ class Form {
     private JCheckBox niftyGUI;
     private JCheckBox examples;
     private JCheckBox networking;
-    private JTextField myGameTextField;
+    private JTextField gameName;
     private JTextField jmeVersion;
-    private JTextField directory;
+    private JTextField gameDirectory;
     private JTextField gamePackage;
     private JButton buildProjectButton;
     private JButton browseButton;
     private JComboBox jmeRelease;
     private JProgressBar progressBar1;
-
-
     private BufferedWriter bw = null;
     private BufferedReader br = null;
     private FileWriter fw = null;
@@ -65,22 +73,24 @@ class Form {
     private HashMap<String, String> specialWords = new HashMap<>();
     private String coreDependencies, desktopDependencies, androidDependencies, iosDependencies, vrDependencies;
 
+    //the constructor of this class init the listeners
+
     Form() {
         File projectDir = FileSystemView.getFileSystemView().getDefaultDirectory();
-        directory.setText(projectDir.getAbsolutePath());
+        gameDirectory.setText(projectDir.getAbsolutePath() + "\\" + gameName.getText());
         browseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 JFileChooser jFileChooser = new JFileChooser();
                 jFileChooser.setVisible(true);
-                jFileChooser.setDialogTitle("Choose your project directory");
+                jFileChooser.setDialogTitle("Choose your project gameDirectory");
                 jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int returnValue = jFileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     if (jFileChooser.getSelectedFile().isDirectory()) {
                         File projectDir = jFileChooser.getSelectedFile();
-                        directory.setText(projectDir.getAbsolutePath());
+                        gameDirectory.setText(projectDir.getAbsolutePath() + "\\" + gameName.getText());
                     }
                 }
             }
@@ -97,21 +107,23 @@ class Form {
                         e1.printStackTrace();
                     }
                     progressBar1.setValue(100);
-                    JOptionPane.showMessageDialog(null,"the build is done");
+                    JOptionPane.showMessageDialog(null, "the build is done");
                 }
             }
 
         });
+        gameName.addActionListener(actionEvent -> gameDirectory.setText(projectDir.getAbsolutePath() + "\\" + gameName.getText()));
 
     }
-
+    
     private void buildProject() throws IOException {
         progressBar1.setValue(10);
-        String modules="";
+        String modules = "";
         specialWords.put("package", gamePackage.getText());
-        File projectDir = new File(directory.getText() + "\\" + myGameTextField.getText());
+        specialWords.put("gameName", gameName.getText());
+        File projectDir = new File(gameDirectory.getText());
         projectDir.mkdir(); //the project folder
-        File gradleDir=new File(projectDir.getPath()+"\\gradle\\wrapper");
+        File gradleDir = new File(projectDir.getPath() + "\\gradle\\wrapper");
         gradleDir.mkdirs();
         File assetsDir = new File(projectDir.getPath() + "\\assets");
         assetsDir.mkdir(); //assets folder
@@ -134,8 +146,8 @@ class Form {
         // add the necessary dependency to all modules
         coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
         // make gradle warrper files
-        createFile(gradleDir,"gradle-wrapper.properties","template/gradle/wrapper/gradle-wrapper.properties");
-        copyFile("template/gradle/wrapper/gradle-wrapper.jar",gradleDir+"/gradle-wrapper.jar");
+        createFile(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
+        copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
 
         // if the desktop is selected create desktop module files and folders
         if (desktop.isSelected()) {
@@ -178,6 +190,25 @@ class Form {
             androidDir.mkdir();
             File androidJavaDir = new File(androidDir.getPath() + "\\src\\java\\" + gamePackage.getText().replace(".", "\\"));
             androidJavaDir.mkdirs();
+            File androidRes = new File(androidDir.getPath() + "/src/res");
+            androidRes.mkdirs();
+
+            new File(androidRes.getPath() + "/mipmap-xxxhdpi").mkdir();
+            new File(androidRes.getPath() + "/mipmap-xxhdpi").mkdir();
+            new File(androidRes.getPath() + "/mipmap-xhdpi").mkdir();
+            new File(androidRes.getPath() + "/mipmap-hdpi").mkdir();
+            new File(androidRes.getPath() + "/mipmap-mdpi").mkdir();
+            new File(androidRes.getPath() + "/mipmap-anydpi-v26").mkdir();
+            new File(androidRes.getPath() + "/drawable").mkdir();
+            new File(androidRes.getPath() + "/drawable-v24").mkdir();
+
+            File androidValues = new File(androidDir.getPath() + "/src/values");
+            androidValues.mkdir();
+
+            createFile(androidValues, "colors.xml", "template/android/src/main/res/values/colors.xml");
+            createFile(androidValues, "strings.xml", "template/android/src/main/res/values/strings.xml");
+            createFile(androidValues, "styles.xml", "template/android/src/main/res/values/styles.xml");
+
             createFile(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
             createFile(androidDir, "build.gradle", "template/android/build.gradle");
             createFile(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
@@ -231,35 +262,37 @@ class Form {
         // if module is selected add his dependencies to gradle build file
         if (android.isSelected()) {
             specialWords.put("androidDependencies", androidDependencies + "\n\t}\n}");
-            modules=modules+", 'android'";
+            modules = modules + ", 'android'";
         } else {
             specialWords.put("androidDependencies", "");
         }
         if (desktop.isSelected()) {
             specialWords.put("desktopDependencies", desktopDependencies + "\n\t}\n}");
-            modules=modules+", 'desktop'";
+            modules = modules + ", 'desktop'";
         } else {
             specialWords.put("desktopDependencies", "");
         }
         if (ios.isSelected()) {
             specialWords.put("iosDependencies", iosDependencies + "\n\t}\n}");
-            modules=modules+", 'ios'";
+            modules = modules + ", 'ios'";
         } else {
             specialWords.put("iosDependencies", "");
         }
         if (vr.isSelected()) {
             specialWords.put("vrDependencies", vrDependencies + "\n\t}\n}");
-            modules=modules+", 'vr'";
+            modules = modules + ", 'vr'";
         } else {
             specialWords.put("vrDependencies", "");
         }
 
         specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getModel().getSelectedItem());
         createFile(projectDir, "build.gradle", "template/build.gradle");
-        newFile(projectDir,"settings.gradle",
-                "include 'core','assets'"+modules);
+        newFile(projectDir, "settings.gradle",
+                "include 'core','assets'" + modules);
         progressBar1.setValue(90);
     }
+
+    //this method create files using String
 
     private void addDependencies() {
 
@@ -312,7 +345,8 @@ class Form {
         }
     }
 
-    // this method create files using templates
+    // this method get templates file content and convert them then give them to newFile method
+
     private void createFile(File path, String name, String tmpPath) {
         String tempContent = "";
         try {
@@ -329,24 +363,24 @@ class Form {
             for (String key : specialWords.keySet()) {
                 tempContent = tempContent.replace("${" + key + "}", specialWords.get(key));
             }
-            if (!newFile(path,name,tempContent)){
+            if (!newFile(path, name, tempContent)) {
                 JOptionPane.showMessageDialog(null,
-                        "Failed tp create file: "+path+"/"+name+"\n this generally happen when the file is already exist!");
+                        "Failed t0 create file: " + path + "/" + name + "\n this generally happen when the file is already exist!");
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-          closeFile();
+            closeFile();
         }
     }
 
-    //this method create files using String
+    // this this method create files with content
 
-    private boolean newFile(File path,String name,String content){
+    private boolean newFile(File path, String name, String content) {
         File mainClass = new File(path.getPath() + "\\" + name);
         try {
-            if (!mainClass.createNewFile()){
-             return false;
+            if (!mainClass.createNewFile()) {
+                return false;
             }
             fw = new FileWriter(mainClass.getAbsolutePath());
             bw = new BufferedWriter(fw);
@@ -360,8 +394,28 @@ class Form {
         }
     }
 
+    //this method copy a file from the template folder and put it in the selected path
+
+    private void copyFile(String source, String dir) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(new File(source));
+            os = new FileOutputStream(new File(dir));
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
+        }
+    }
+
     // close the opened file
-    private void closeFile(){
+
+    private void closeFile() {
         try {
             if (bw != null)
                 bw.close();
@@ -388,6 +442,7 @@ class Form {
      *if the selected modules are compatible withe all the dependencies it will return true
      * if not show an alert to the user
      */
+
     private boolean isSelectedOk() {
         if (blender.isSelected() && (android.isSelected() || ios.isSelected() || vr.isSelected())) {
             JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop");
@@ -399,20 +454,6 @@ class Form {
             return true;
         }
     }
-    private static void copyFile(String source, String dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(new File(source));
-            os = new FileOutputStream(new File(dest));
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-        } finally {
-            is.close();
-            os.close();
-        }
-    }
+
+
 }
