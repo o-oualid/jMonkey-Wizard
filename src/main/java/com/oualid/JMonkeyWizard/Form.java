@@ -149,7 +149,7 @@ class Form {
         File coreDir = new File(projectDir.getPath() + "/core"); //core folder
         coreDir.mkdir();
         File javaDir = new File(coreDir.getPath() +
-                "/src/java/" + gamePackage.getText().replace(".", "/"));// core java folder
+                "/src/main/java/" + gamePackage.getText().replace(".", "/"));// core java folder
         javaDir.mkdirs();
         createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
         createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
@@ -168,7 +168,7 @@ class Form {
             File desktopDir = new File(projectDir.getPath() + "/desktop");
             desktopDir.mkdir();
             File desktopJavaDir = new File(desktopDir.getPath()
-                    + "/src/java/" + gamePackage.getText().replace(".", "/"));
+                    + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
             desktopJavaDir.mkdirs();
             createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
             createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle");
@@ -202,10 +202,12 @@ class Form {
         if (android.isSelected()) {
             File androidDir = new File(projectDir.getPath() + "/android");
             androidDir.mkdir();
-            File androidJavaDir = new File(androidDir.getPath() +
-                    "/src/java/" + gamePackage.getText().replace(".", "/"));
+            File androidMainDir = new File(androidDir.getPath() + "/src/main");
+            androidMainDir.mkdirs();
+            File androidJavaDir = new File(androidMainDir.getPath() +
+                    "/java/" + gamePackage.getText().replace(".", "/"));
             androidJavaDir.mkdirs();
-            File androidRes = new File(androidDir.getPath() + "/src/res");
+            File androidRes = new File(androidMainDir + "/res");
             androidRes.mkdirs();
             copyDirectory(new File(classLoader.getResource("template/android/res").getFile()), androidRes, "template/android/res");
             File androidValues = new File(androidRes.getPath() + "/values");
@@ -215,7 +217,7 @@ class Form {
             createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
             createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
             createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
-            createFileFromTmp(androidDir, "AndroidManifest.xml", "template/android/src/main/AndroidManifest.xml");
+            createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/src/main/AndroidManifest.xml");
 
             // add android necessary dependencies
             androidDependencies = "project(\":android\") {\n" +
@@ -237,7 +239,7 @@ class Form {
         if (ios.isSelected()) {
             File iosDir = new File(projectDir.getPath() + "/ios");
             iosDir.mkdir();
-            File iosJavaDir = new File(iosDir.getPath() + "/src/java/" +
+            File iosJavaDir = new File(iosDir.getPath() + "/src/main/java/" +
                     gamePackage.getText().replace(".", "/"));
             iosJavaDir.mkdirs();
             createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
@@ -257,7 +259,7 @@ class Form {
         if (vr.isSelected()) {
             File vrDir = new File(projectDir.getPath() + "/vr");
             vrDir.mkdir();
-            File vrJavaDir = new File(vrDir.getPath() + "/src/java/" +
+            File vrJavaDir = new File(vrDir.getPath() + "/src/main/java/" +
                     gamePackage.getText().replace(".", "/"));
             vrJavaDir.mkdirs();
             createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
