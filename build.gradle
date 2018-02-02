@@ -1,6 +1,8 @@
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+sourceSets.main.resources.srcDirs(["../src/main/resources"])
+sourceSets.main.java.srcDirs = [ "src/main/java" ]
 buildscript {
     repositories {
         mavenCentral()

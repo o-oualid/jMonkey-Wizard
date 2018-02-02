@@ -2,11 +2,9 @@
 .jar
 .xml
 .properties
-/.gradle
 /out
-/idea
 *.xml
-
 \.idea/
-
 META-INF/
+/out/
+/.gradle/

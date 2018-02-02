@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.oualid.jmonkeyWizrad.Form">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.oualid.JMonkeyWizard.Form">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="600" height="800"/>
     </constraints>
     <properties>
-      <background color="-13750738"/>
+      <background color="-13486260"/>
       <font/>
-      <foreground color="-13750738"/>
+      <foreground color="-5854003"/>
       <inheritsPopupMenu value="false"/>
       <minimumSize width="600" height="800"/>
       <name value="JMonkey Wizard"/>
@@ -24,8 +24,9 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-14145496"/>
+          <background color="-13486260"/>
           <font/>
+          <foreground color="-5854003"/>
           <inheritsPopupMenu value="false"/>
           <verifyInputWhenFocusTarget value="false"/>
         </properties>
@@ -36,8 +37,9 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <horizontalAlignment value="11"/>
               <inheritsPopupMenu value="false"/>
               <text value="Project name:"/>
@@ -49,8 +51,9 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <horizontalAlignment value="11"/>
               <inheritsPopupMenu value="false"/>
               <text value="Package:"/>
@@ -62,8 +65,9 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <horizontalAlignment value="11"/>
               <inheritsPopupMenu value="false"/>
               <text value="Directory:"/>
@@ -107,10 +111,10 @@
               <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <contentAreaFilled value="true"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <text value="Browse"/>
             </properties>
           </component>
@@ -134,8 +138,9 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <horizontalAlignment value="11"/>
               <inheritsPopupMenu value="false"/>
               <text value="JME Version:"/>
@@ -168,8 +173,9 @@
               <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <text value="Release:"/>
               <verifyInputWhenFocusTarget value="false"/>
@@ -180,8 +186,8 @@
               <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
+              <background color="-13486260"/>
+              <foreground color="-5854003"/>
               <model>
                 <item value="stable"/>
                 <item value="beta"/>
@@ -204,9 +210,9 @@
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-14145496"/>
+          <background color="-13486260"/>
           <font/>
-          <foreground color="-1"/>
+          <foreground color="-5854003"/>
           <inheritsPopupMenu value="false"/>
           <verifyInputWhenFocusTarget value="false"/>
         </properties>
@@ -217,8 +223,9 @@
               <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <text value="Dependencies:"/>
               <verifyInputWhenFocusTarget value="false"/>
@@ -229,9 +236,9 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Plugins"/>
@@ -243,9 +250,9 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Terrain"/>
@@ -257,9 +264,9 @@
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <hideActionText value="false"/>
               <selected value="true"/>
               <text value="NiftyGUI"/>
@@ -270,9 +277,9 @@
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Effects"/>
@@ -284,9 +291,9 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="JOGG"/>
@@ -298,9 +305,9 @@
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Networking"/>
@@ -312,8 +319,8 @@
               <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
+              <background color="-13486260"/>
+              <foreground color="-5854003"/>
               <selected value="true"/>
               <text value="LWJGL3"/>
             </properties>
@@ -323,8 +330,8 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
+              <background color="-13486260"/>
+              <foreground color="-5854003"/>
               <selected value="true"/>
               <text value="JBullet"/>
             </properties>
@@ -334,8 +341,8 @@
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
+              <background color="-13486260"/>
+              <foreground color="-5854003"/>
               <text value="Bullet"/>
             </properties>
           </component>
@@ -344,8 +351,8 @@
               <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
+              <background color="-13486260"/>
+              <foreground color="-5854003"/>
               <text value="JOGL"/>
             </properties>
           </component>
@@ -354,8 +361,8 @@
               <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
-              <foreground color="-1"/>
+              <background color="-13486260"/>
+              <foreground color="-5854003"/>
               <text value="LWJGL"/>
             </properties>
           </component>
@@ -364,9 +371,9 @@
               <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <hideActionText value="false"/>
               <text value="Examples"/>
             </properties>
@@ -376,10 +383,10 @@
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <enabled value="true"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="false"/>
               <text value="Blender"/>
@@ -394,8 +401,9 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-14145496"/>
+          <background color="-13486260"/>
           <font/>
+          <foreground color="-5854003"/>
           <inheritsPopupMenu value="false"/>
           <verifyInputWhenFocusTarget value="false"/>
         </properties>
@@ -406,9 +414,9 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Android"/>
@@ -420,10 +428,10 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <enabled value="true"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Desktop"/>
@@ -435,9 +443,9 @@
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="Ios"/>
@@ -449,9 +457,9 @@
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <selected value="true"/>
               <text value="VR"/>
@@ -463,9 +471,9 @@
               <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-1"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <text value="Sub Projects:"/>
               <verifyInputWhenFocusTarget value="false"/>
@@ -479,9 +487,9 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-14145496"/>
+          <background color="-13486260"/>
           <font/>
-          <foreground color="-16747009"/>
+          <foreground color="-5854003"/>
           <inheritsPopupMenu value="false"/>
           <verifyInputWhenFocusTarget value="false"/>
         </properties>
@@ -492,9 +500,9 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <font/>
-              <foreground color="-16747009"/>
+              <foreground color="-5854003"/>
               <inheritsPopupMenu value="false"/>
               <text value="Build Project"/>
               <verifyInputWhenFocusTarget value="false"/>
@@ -505,10 +513,11 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-14145496"/>
+              <background color="-13486260"/>
               <borderPainted value="true"/>
               <enabled value="true"/>
               <font/>
+              <foreground color="-5854003"/>
               <indeterminate value="false"/>
               <inheritsPopupMenu value="false"/>
               <orientation value="0"/>
@@ -527,7 +536,9 @@
           </grid>
         </constraints>
         <properties>
+          <background color="-13486260"/>
           <font/>
+          <foreground color="-5854003"/>
           <icon value="JMonkeylogo.png"/>
           <text value=""/>
         </properties>

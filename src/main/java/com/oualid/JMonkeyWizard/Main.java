@@ -1,10 +1,10 @@
-package com.oualid.jmonkeyWizrad;
+package com.oualid.JMonkeyWizard;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 /**
- * Created by: ouazrou-oualid on: 26/01/2018 package: com.oualid.jmonkeyWizrad project: JMonkey Wizard.
+ * Created by: ouazrou-oualid on: 26/01/2018 package: com.oualid.JMonkeyWizard project: JMonkey Wizard.
  */
 
 class Main extends JFrame {
