@@ -124,12 +124,14 @@ class Form {
             addDesktop();
         } else {
             specialWords.put("desktopDependencies", "");
+
         }
         progressBar1.setValue(30);
         if (android.isSelected()) {
             addAndroid();
         } else {
             specialWords.put("androidDependencies", "");
+            specialWords.put("androidClasspath","");
         }
         progressBar1.setValue(40);
         if (ios.isSelected()) {
@@ -234,6 +236,9 @@ class Form {
                 "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n" +
                 androidDependencies + "\n\t}\n}";
         specialWords.put("androidDependencies", androidDependencies);
+        specialWords.put("androidClasspath"," classpath 'com.android.tools.build:gradle:2.3.0'\n" +
+                "        //if you you will use Intellij IDEA instead of Android Studio do not update android gradle plugin to 3.0.0 or more this will cause an issue, at least until an update Intellij IDEA update the android plugin.\n" +
+                "        ");
         modules = modules + ", 'android'";
     }
 

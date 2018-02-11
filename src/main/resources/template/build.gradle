@@ -2,11 +2,10 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
-        google()
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        //if you you will use Intellij IDEA instead of Android Studio do not update android gradle plugin to 3.0.0 or more this will cause an issue, at least until an update Intellij IDEA update the android plugin.
+        ${androidClasspath}
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
@@ -17,7 +16,6 @@ allprojects {
     repositories {
         maven { url "http://dl.bintray.com/jmonkeyengine/org.jmonkeyengine" }
         mavenCentral()
-        google()
     }
 }
 
