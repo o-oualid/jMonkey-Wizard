@@ -1,10 +1,4 @@
 .class
 .jar
-.xml
 .properties
 /out
-*.xml
-\.idea/
-META-INF/
-/out/
-/.gradle/
