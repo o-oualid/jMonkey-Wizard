@@ -113,7 +113,6 @@ public class FileUtils {
         File[] children = sourceFile.listFiles();
         if(children != null) {
             for(File child : children) {
-                System.out.print(child.getAbsolutePath()+"\n");
                 if(child.isDirectory()) {
                     File dir=new File(targetLocation + "/" + child.getName());
                     dir.mkdir();

@@ -1,5 +1,6 @@
 package com.oualid.JMonkeyWizard;
 
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -31,12 +32,13 @@ import javax.swing.JTextField;
 
 class Form {
     public JPanel mainPanel;
-    private JRadioButton bullet;
-    private JRadioButton jBullet;
+
     private JRadioButton jogl;
     private JRadioButton lwjgl;
     private JRadioButton lwjgl3;
     private JCheckBox jogg;
+    private JCheckBox jBullet;
+    private JCheckBox bullet;
     private JCheckBox plugins;
     private JCheckBox android;
     private JCheckBox desktop;
@@ -56,6 +58,7 @@ class Form {
     private JButton browseButton;
     private JComboBox jmeRelease;
     private JProgressBar progressBar1;
+ ;
     private String modules;
     static HashMap<String, String> specialWords = new HashMap<>();
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
@@ -214,7 +217,7 @@ class Form {
         File androidValues = new File(androidRes.getPath() + "/values");
         androidValues.mkdir();
         fileUtils.copyDirectory("template/android/res", androidRes.getAbsolutePath());
-        fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
+       fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
         fileUtils.createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
         fileUtils.createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
         fileUtils.createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
@@ -306,14 +309,17 @@ class Form {
         if (projectDir.getAbsoluteFile().exists()) {
             JOptionPane.showMessageDialog(null, "Directory already exist choose an other one!");
             return false;
-        } else if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
-            JOptionPane.showMessageDialog(null, "You need to select at least one module");
+        }else if (jBullet.isSelected()&&bullet.isSelected()){
+            JOptionPane.showMessageDialog(null, "You can't choose JBullet an Bullet at the same time!");
+            return false;
+        }else if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
+            JOptionPane.showMessageDialog(null, "You need to select at least one module!");
             return false;
         } else if (blender.isSelected() && (android.isSelected() || ios.isSelected() || vr.isSelected())) {
-            JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop");
+            JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop!");
             return false;
         } else if (bullet.isSelected() && (ios.isSelected() || vr.isSelected())) {
-            JOptionPane.showMessageDialog(null, "Native Bullet is not compatible with Ios and VR\n use JBullet instead");
+            JOptionPane.showMessageDialog(null, "Native Bullet is not compatible with Ios and VR\n use JBullet instead!");
             return false;
         } else {
             return true;
