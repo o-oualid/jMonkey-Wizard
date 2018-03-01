@@ -1,21 +1,10 @@
 package com.oualid.JMonkeyWizard;
 
-import java.awt.*;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 //Created by: ouazrou-oualid on: 26/01/2018 package: com.oualid.JMonkeyWizard project: JMonkey Wizard.
 
@@ -32,7 +21,6 @@ import javax.swing.JTextField;
 
 class Form {
     public JPanel mainPanel;
-
     private JRadioButton jogl;
     private JRadioButton lwjgl;
     private JRadioButton lwjgl3;
@@ -58,19 +46,17 @@ class Form {
     private JButton browseButton;
     private JComboBox jmeRelease;
     private JProgressBar progressBar1;
- ;
     private String modules;
     static HashMap<String, String> specialWords = new HashMap<>();
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
     private File projectDir;
-
     private FileUtils fileUtils = new FileUtils();
     //the constructor of this class init the listeners
 
     Form() {
         projectDir = new File(gameName.getText());
         gameDirectory.setText(projectDir.getAbsolutePath());
-        projectDir=new File(projectDir.getAbsolutePath());
+        projectDir = new File(projectDir.getAbsolutePath());
 
         browseButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -131,7 +117,7 @@ class Form {
             addAndroid();
         } else {
             specialWords.put("androidDependencies", "");
-            specialWords.put("androidClasspath","");
+            specialWords.put("androidClasspath", "");
         }
         progressBar1.setValue(40);
         if (ios.isSelected()) {
@@ -219,7 +205,7 @@ class Form {
         File androidValues = new File(androidRes.getPath() + "/values");
         androidValues.mkdir();
         fileUtils.copyDirectory("template/android/res", androidRes.getAbsolutePath());
-       fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
+        fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
         fileUtils.createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
         fileUtils.createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
         fileUtils.createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
@@ -231,12 +217,12 @@ class Form {
                 "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
                 "\t\t\tcompile fileTree(dir: 'libs', include: ['*.jar'])\n" +
                 "\t\t\ttestCompile 'junit:junit:4.12'\n" +
-                "\t\t\tcompile 'com.android.support:appcompat-v7:27.0.2'\n" +
+                "\t\t\tcompile 'com.android.support:appcompat-v7:27.1.0'\n" +
                 "\t\t\tcompile \"org.jmonkeyengine:jme3-android:$JMonkey_version\"\n" +
                 "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n" +
                 androidDependencies + "\n\t}\n}";
         specialWords.put("androidDependencies", androidDependencies);
-        specialWords.put("androidClasspath"," classpath 'com.android.tools.build:gradle:2.3.0'\n" +
+        specialWords.put("androidClasspath", "classpath 'com.android.tools.build:gradle:2.3.0'\n" +
                 "        //if you you will use Intellij IDEA instead of Android Studio do not update android gradle plugin to 3.0.0 or more this will cause an issue, at least until an update Intellij IDEA update the android plugin.\n" +
                 "        ");
         modules = modules + ", 'android'";
@@ -314,10 +300,10 @@ class Form {
         if (projectDir.getAbsoluteFile().exists()) {
             JOptionPane.showMessageDialog(null, "Directory already exist choose an other one!");
             return false;
-        }else if (jBullet.isSelected()&&bullet.isSelected()){
+        } else if (jBullet.isSelected() && bullet.isSelected()) {
             JOptionPane.showMessageDialog(null, "You can't choose JBullet an Bullet at the same time!");
             return false;
-        }else if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
+        } else if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
             JOptionPane.showMessageDialog(null, "You need to select at least one module!");
             return false;
         } else if (blender.isSelected() && (android.isSelected() || ios.isSelected() || vr.isSelected())) {
