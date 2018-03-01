@@ -8,7 +8,7 @@
     <properties>
       <background color="-14273992"/>
       <font/>
-      <foreground color="-5854003"/>
+      <foreground color="-14103296"/>
       <inheritsPopupMenu value="false"/>
       <minimumSize width="600" height="800"/>
       <name value="JMonkey Wizard"/>
@@ -102,7 +102,7 @@
               <font/>
               <foreground color="-14145496"/>
               <inheritsPopupMenu value="false"/>
-              <text value="com.jmonkey.game"/>
+              <text value="com.jmonkey.mygame"/>
               <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>

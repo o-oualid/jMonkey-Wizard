@@ -1,6 +1,8 @@
 package com.oualid.JMonkeyWizard;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -91,12 +93,36 @@ class Form {
         });
 
         gameDirectory.addActionListener(e -> projectDir = new File(gameDirectory.getText()));
+        gameName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
 
-        gameName.addActionListener(actionEvent -> {
-            gameDirectory.setText(projectDir.getParentFile().getAbsolutePath() + "/" + gameName.getText());
-            projectDir = new File(gameDirectory.getText());
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!gameName.getText().isEmpty()) {
+                    gameDirectory.setText(projectDir.getParentFile().getAbsolutePath() + "/" + gameName.getText());
+                    projectDir = new File(gameDirectory.getText());
+                    String[] packages = (gamePackage.getText()).split("\\.");
+                    packages[packages.length - 1] = gameName.getText()
+                            .replace(" ", "")
+                            .replace(".", "")
+                            .toLowerCase();
+                    String p = "";
+                    for (String string : packages) {
+                        if (!p.isEmpty()) p += ".";
+                        p += string;
+                    }
+                    gamePackage.setText(p);
+                }
+            }
         });
-
     }
 
     private void buildProject() {
@@ -297,20 +323,30 @@ class Form {
      */
 
     private boolean isSelectedOk() {
-        if (projectDir.getAbsoluteFile().exists()) {
-            JOptionPane.showMessageDialog(null, "Directory already exist choose an other one!");
+        if (gameName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Game name can't be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (gamePackage.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Package can't be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+
+        } else if (gameDirectory.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Directory can't be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (projectDir.getAbsoluteFile().exists()) {
+            JOptionPane.showMessageDialog(null, "Directory already exist choose an other one!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (jBullet.isSelected() && bullet.isSelected()) {
-            JOptionPane.showMessageDialog(null, "You can't choose JBullet an Bullet at the same time!");
+            JOptionPane.showMessageDialog(null, "You can't choose JBullet an Bullet at the same time!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
-            JOptionPane.showMessageDialog(null, "You need to select at least one module!");
+            JOptionPane.showMessageDialog(null, "You need to select at least one module!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (blender.isSelected() && (android.isSelected() || ios.isSelected() || vr.isSelected())) {
-            JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop!");
+            JOptionPane.showMessageDialog(null, "Blender is compatible only with Desktop!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (bullet.isSelected() && (ios.isSelected() || vr.isSelected())) {
-            JOptionPane.showMessageDialog(null, "Native Bullet is not compatible with Ios and VR\n use JBullet instead!");
+            JOptionPane.showMessageDialog(null, "Native Bullet is not compatible with Ios and VR\n use JBullet instead!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             return true;
