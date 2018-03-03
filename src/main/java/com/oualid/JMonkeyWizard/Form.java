@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 
 class Form {
-    public JPanel mainPanel;
+    JPanel mainPanel;
     private JRadioButton jogl;
     private JRadioButton lwjgl;
     private JRadioButton lwjgl3;
@@ -53,13 +53,20 @@ class Form {
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
     private File projectDir;
     private FileUtils fileUtils = new FileUtils();
+    //private JFrame dependencies=new JFrame();
+    //private DependenciesUI dependenciesUI=new DependenciesUI();
+
     //the constructor of this class init the listeners
 
     Form() {
+       /* dependencies.setTitle("Dependencies");
+        dependencies.setContentPane(dependenciesUI.dependencies);
+        dependencies.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        dependencies.setResizable(false);
+        dependencies.pack();*/
         projectDir = new File(gameName.getText());
         gameDirectory.setText(projectDir.getAbsolutePath());
         projectDir = new File(projectDir.getAbsolutePath());
-
         browseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -91,7 +98,12 @@ class Form {
             }
 
         });
-
+       /* more.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dependencies.setVisible(true);
+            }
+        });*/
         gameDirectory.addActionListener(e -> projectDir = new File(gameDirectory.getText()));
         gameName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -107,7 +119,9 @@ class Form {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 if (!gameName.getText().isEmpty()) {
-                    gameDirectory.setText(projectDir.getParentFile().getAbsolutePath() + "/" + gameName.getText());
+                    gameDirectory.setText(
+                            projectDir.getParentFile().getAbsolutePath() + "/" +
+                                    gameName.getText().replace("/", ""));
                     projectDir = new File(gameDirectory.getText());
                     String[] packages = (gamePackage.getText()).split("\\.");
                     packages[packages.length - 1] = gameName.getText()

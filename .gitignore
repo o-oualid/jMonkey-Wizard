@@ -7,3 +7,5 @@
 \.gradle/
 
 *.iml
+
+src/main/java/META-INF/
