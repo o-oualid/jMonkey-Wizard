@@ -120,7 +120,7 @@ class Form {
             public void changedUpdate(DocumentEvent e) {
                 if (!gameName.getText().isEmpty()) {
                     gameDirectory.setText(
-                            projectDir.getParentFile().getAbsolutePath() + "/" +
+                            projectDir.getParentFile().getAbsolutePath() + "\\" +
                                     gameName.getText().replace("/", ""));
                     projectDir = new File(gameDirectory.getText());
                     String[] packages = (gamePackage.getText()).split("\\.");
