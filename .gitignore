@@ -1,11 +1,3 @@
-.class
-.jar
-.properties
-/out
-\.idea/
-
-\.gradle/
-
-*.iml
-
-src/main/java/META-INF/
+/.idea/
+/out/
+/.gradle/

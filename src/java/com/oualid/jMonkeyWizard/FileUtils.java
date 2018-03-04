@@ -1,20 +1,25 @@
-package com.oualid.JMonkeyWizard;
+package com.oualid.jMonkeyWizard;
 
-import javax.swing.*;
+import javafx.scene.control.TextArea;
 import java.io.*;
 
-
 public class FileUtils {
-    private ClassLoader classLoader = getClass().getClassLoader();
     private InputStream is;
     private OutputStream out;
     private BufferedWriter bw = null;
     private BufferedReader br = null;
     private FileWriter fw = null;
     private FileReader fr = null;
+    private TextArea messages;
+
+    FileUtils(TextArea messages) {
+        this.messages = messages;
+    }
 
     void createFileFromTmp(File path, String name, String tmpPath) {
+
         try {
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(tmpPath)));
             StringBuilder out = new StringBuilder();
             String line;
@@ -24,15 +29,13 @@ public class FileUtils {
             }
 
 
-            for (String key : Form.specialWords.keySet()) {
-                out = new StringBuilder(out.toString().replace("${" + key + "}", Form.specialWords.get(key)));
+            for (String key : Controller.specialWords.keySet()) {
+                out = new StringBuilder(out.toString().replace("${" + key + "}", Controller.specialWords.get(key)));
             }
             createFileFromContent(path, name, out.toString());
 
-
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e, "ERROR!", JOptionPane.ERROR_MESSAGE);
         } finally {
             closeFile();
         }
@@ -46,9 +49,9 @@ public class FileUtils {
             fw = new FileWriter(file.getAbsolutePath());
             bw = new BufferedWriter(fw);
             bw.write(content);
+            messages.setText(messages.getText() + "File successfully created: " + path + "/" + name + "\n");
         } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e, "ERROR!", JOptionPane.ERROR_MESSAGE);
+            messages.setText(messages.getText() + "Failed to create file: " + path + "/" + name + "\n");
         } finally {
             closeFile();
         }
@@ -65,9 +68,9 @@ public class FileUtils {
             while ((length = is.read(buffer)) > 0) {
                 out.write(buffer, 0, length);
             }
+            messages.setText(messages.getText() + "File copied from: " + source + " to: " + dir + "\n");
         } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e, "ERROR!", JOptionPane.ERROR_MESSAGE);
+            messages.setText(messages.getText() + "Failed to copy file from: " + source + " to: " + dir + "\n");
         } finally {
             closeFile();
         }
@@ -106,19 +109,30 @@ public class FileUtils {
 
     //this method copy a directory with all it content to the des directory
     void copyDirectory(String sourceLocation, String targetLocation) {
-        File sourceFile = new File(classLoader.getResource(sourceLocation).getFile());
-        sourceFile = new File(sourceFile.getAbsolutePath());
+        File sourceFile = new File(sourceLocation);
         File[] children = sourceFile.listFiles();
         if (children != null) {
             for (File child : children) {
                 if (child.isDirectory()) {
-                    File dir = new File(targetLocation + "/" + child.getName());
-                    dir.mkdir();
+                    File dir = newDir(targetLocation + "/" + child.getName());
                     copyDirectory(sourceLocation + "/" + child.getName(), dir.getAbsolutePath());
                 } else if (child.isFile()) {
                     copyFile(sourceLocation + "/" + child.getName(), targetLocation + "/" + child.getName());
                 }
             }
+        } else {
+            messages.setText(messages.getText() + "The template Directory: " + sourceFile.getAbsolutePath() + "is empty!\n");
         }
+    }
+
+    File newDir(String path) {
+        File file = new File(path);
+        if (file.mkdirs()) {
+            messages.setText(messages.getText() + "Folder successfully created: " + file.getPath() + "\n");
+        } else {
+            messages.setText(messages.getText() + "Failed to create folder: " + file.getPath() + "\n");
+        }
+        return file;
+
     }
 }
