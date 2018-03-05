@@ -1,0 +1,73 @@
+.button {
+    -fx-text-fill: #0075ff;
+    -fx-background-color: #2F2F2F;
+    -fx-border-color: #0075FF;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.check-box {
+    -fx-text-fill: white;
+    -fx-background-color: #1F1F1F;
+}
+
+.progress-bar {
+    -fx-text-fill: #00ff00;
+    -fx-background-color: #0075FF;
+    -fx-progress-color: #0075ff;
+    -fx-color-label-visible: #212121;
+    -fx-border-color:#0075ff;
+    -fx-border-radius:0;
+    -fx-background-radius: 0;
+}
+
+.text-field {
+    -fx-text-fill: white;
+    -fx-background-color: #2F2F2F;
+    -fx-border-color: #0075FF;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.combo-box {
+    -fx-text-fill: white;
+    -fx-background-color: #1F1F1F;
+}
+
+.radio-button {
+    -fx-text-fill: white;
+    -fx-background-color: #1F1F1F;
+
+}
+
+.label {
+    -fx-text-fill: #0075ff;
+}
+
+.root {
+    -fx-background-color: #1F1F1F;
+}
+
+.text-area {
+    -fx-text-fill: #1F1F1F;
+    -fx-color-label-visible: #1f1f1f;
+    -fx-background-color: #1F1F1F;
+    -fx-color: #1F1F1F;
+    -fx-border-color: #0075FF;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.text-area:hover {
+    -fx-text-fill: #1F1F1F;
+    -fx-color-label-visible: #1f1f1f;
+    -fx-background-color: #1F1F1F;
+    -fx-color: #0075ff;
+    -fx-border-color: #0075FF;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+.separator{
+    -fx-background-color: #0075ff;
+   -fx-pref-height: 2;
+}

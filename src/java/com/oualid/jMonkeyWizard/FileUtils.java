@@ -1,6 +1,7 @@
 package com.oualid.jMonkeyWizard;
 
 import javafx.scene.control.TextArea;
+
 import java.io.*;
 
 public class FileUtils {
@@ -16,18 +17,24 @@ public class FileUtils {
         this.messages = messages;
     }
 
+    /**
+     * this method copy file from template then give it to {@link FileUtils#createFileFromContent}
+     *
+     * @param path    path to where you want to create the file
+     * @param name    the file name
+     * @param tmpPath the template file directory in String
+     */
+
     void createFileFromTmp(File path, String name, String tmpPath) {
 
         try {
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(tmpPath)));
+            BufferedReader reader = new BufferedReader(new FileReader(tmpPath));
             StringBuilder out = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 out.append(line).append("\n");
-
             }
-
 
             for (String key : Controller.specialWords.keySet()) {
                 out = new StringBuilder(out.toString().replace("${" + key + "}", Controller.specialWords.get(key)));
@@ -35,13 +42,20 @@ public class FileUtils {
             createFileFromContent(path, name, out.toString());
 
         } catch (IOException e) {
+            messages.setText(messages.getText() + "Failed to create file: " + path + "/" + name + "\n");
             e.printStackTrace();
         } finally {
             closeFile();
         }
     }
 
-    // this this method create files with content
+    /**
+     * this method create file and put Sting content on it.
+     *
+     * @param path    path to where you want to create the file
+     * @param name    the file name
+     * @param content the content that will be in the file.
+     */
 
     void createFileFromContent(File path, String name, String content) {
         File file = new File(path.getPath() + "/" + name);
@@ -57,11 +71,17 @@ public class FileUtils {
         }
     }
 
-    //this method copy a file from the template folder and put it is the selected path
+    /**
+     * this method copy a file from the template folder and put it is the selected path
+     *
+     * @param source source file need to be File not directory
+     * @param dir    the file destination
+     */
+
 
     void copyFile(String source, String dir) {
         try {
-            is = ClassLoader.getSystemResourceAsStream(source);
+            is = new FileInputStream(source);
             out = new FileOutputStream(new File(dir));
             byte[] buffer = new byte[1024];
             int length;
@@ -76,7 +96,10 @@ public class FileUtils {
         }
     }
 
-    // close the opened file
+    /**
+     * close the opened file
+     * called after using bw,fw...
+     */
 
     private void closeFile() {
         try {
@@ -107,7 +130,13 @@ public class FileUtils {
         }
     }
 
-    //this method copy a directory with all it content to the des directory
+    /**
+     * this method copy a directory with all it content to the des directory
+     * Note:this method will not work in jar file directory in jar ar not actually directory.
+     *
+     * @param sourceLocation the source directory
+     * @param targetLocation the targeted directory
+     */
     void copyDirectory(String sourceLocation, String targetLocation) {
         File sourceFile = new File(sourceLocation);
         File[] children = sourceFile.listFiles();
@@ -121,12 +150,18 @@ public class FileUtils {
                 }
             }
         } else {
-            messages.setText(messages.getText() + "The template Directory: " + sourceFile.getAbsolutePath() + "is empty!\n");
+            messages.setText(messages.getText() + "The template Directory: " + sourceFile.getAbsolutePath() + " is empty!\n");
         }
     }
 
-    File newDir(String path) {
-        File file = new File(path);
+    /**
+     * this method create new directory then return it.
+     *
+     * @param directory the directory path in String
+     * @return file type File
+     */
+    File newDir(String directory) {
+        File file = new File(directory);
         if (file.mkdirs()) {
             messages.setText(messages.getText() + "Folder successfully created: " + file.getPath() + "\n");
         } else {

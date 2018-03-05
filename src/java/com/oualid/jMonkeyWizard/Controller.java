@@ -5,13 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class Controller extends VBox {
+
+    /**
+     * Variables  annotated by @FXML are initialized don't listen to your IDE
+     */
 
     static HashMap<String, String> specialWords = new HashMap<>();
     @FXML
@@ -66,12 +69,16 @@ public class Controller extends VBox {
     private ProgressBar progressBar;
     @FXML
     private TextArea messages;
+    @FXML
+    private Button more;
     private String modules;
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
     private File projectDir;
     private FileUtils fileUtils;
 
-
+    /**
+     * the constructor of this class
+     */
     Controller() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/ui.fxml"));
         fxmlLoader.setController(this);
@@ -88,6 +95,9 @@ public class Controller extends VBox {
         update();
     }
 
+    /**
+     * called by {@link Controller#buildProject} when clicked
+     */
 
     @FXML
     private void build() {
@@ -126,12 +136,16 @@ public class Controller extends VBox {
 
         progressBar.setProgress(60);
 
-        specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getTypeSelector());
+        specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getValue());
         fileUtils.createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
         fileUtils.createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
         progressBar.setProgress(80);
         messages.setText(messages.getText() + "Build end");
     }
+
+    /**
+     * called by {@link Controller#build()} when the build start
+     */
 
     private void addCore() {
         specialWords.put("package", gamePackage.getText());
@@ -166,6 +180,10 @@ public class Controller extends VBox {
 
     }
 
+    /**
+     * called by {@link Controller#build()} if {@link Controller#desktop} is selected
+     */
+
     private void addDesktop() {
         File desktopDir = fileUtils.newDir(projectDir.getPath() + "/desktop");
 
@@ -185,6 +203,9 @@ public class Controller extends VBox {
         modules = modules + ", 'desktop'";
     }
 
+    /**
+     * called by {@link Controller#build()} if {@link Controller#android} is selected
+     */
     private void addAndroid() {
         File androidDir = fileUtils.newDir(projectDir.getPath() + "/android");
         File androidMainDir = fileUtils.newDir(androidDir.getPath() + "/src/main");
@@ -216,6 +237,9 @@ public class Controller extends VBox {
         modules = modules + ", 'android'";
     }
 
+    /**
+     * called by {@link Controller#build()} if {@link Controller#ios} is selected
+     */
     private void addIos() {
         File iosDir = fileUtils.newDir(projectDir.getPath() + "/ios");
         File iosJavaDir = fileUtils.newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
@@ -228,6 +252,10 @@ public class Controller extends VBox {
 
     }
 
+    /**
+     * called by {@link Controller#build()} if {@link Controller#vr} is selected
+     */
+
     private void addVr() {
         File vrDir = fileUtils.newDir(projectDir.getPath() + "/vr");
         File vrJavaDir = fileUtils.newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
@@ -238,6 +266,10 @@ public class Controller extends VBox {
         specialWords.put("vrDependencies", vrDependencies);
         modules = modules + ", 'vr'";
     }
+
+    /**
+     * called by {@link Controller#build()}
+     */
 
     private void addDependencies() {
 
@@ -274,14 +306,19 @@ public class Controller extends VBox {
         }
     }
 
-    /*
-     *if the selected modules are compatible with all the dependencies
-     * and one module at least is selected it will return true
-     * if not show an alert to the user
-     */
-
     @FXML
     private void update() {
+        if (projectDir.exists()) {
+            buildProject.setDisable(true);
+        } else {
+            buildProject.setDisable(false);
+        }
+        if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
+            buildProject.setDisable(true);
+        } else {
+            buildProject.setDisable(false);
+        }
+
         if (desktop.isSelected()) {
             lwjgl3.setDisable(false);
             jogl.setDisable(false);
@@ -290,9 +327,6 @@ public class Controller extends VBox {
             lwjgl3.setDisable(true);
             jogl.setDisable(true);
             lwjgl.setDisable(true);
-            lwjgl3.setSelected(false);
-            jogl.setSelected(false);
-            lwjgl.setSelected(false);
         }
 
         if (!desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected()) {
@@ -322,6 +356,9 @@ public class Controller extends VBox {
 
     }
 
+    /**
+     * called by {@link Controller#gameName} when modified
+     */
     @FXML
     private void updateGameName() {
         if (!gameName.getText().isEmpty()) {
@@ -337,29 +374,34 @@ public class Controller extends VBox {
             packages[packages.length - 1] = gameName.getText()
                     .replace(" ", "")
                     .replace(".", "");
-            String p = "";
+            StringBuilder p = new StringBuilder();
             for (String string : packages) {
-                if (!p.isEmpty()) p += ".";
-                p += string;
+                if (p.length() > 0) p.append(".");
+                p.append(string);
             }
-            gamePackage.setText(p);
+            gamePackage.setText(p.toString());
         }
     }
 
+    /**
+     * called by {@link Controller#browse} when tapped
+     */
     @FXML
     private void browse() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(projectDir.getParentFile());
-        File selectedFile = directoryChooser.showDialog(new Stage());
+        File selectedFile = directoryChooser.showDialog(Main.primaryStage);
         if (selectedFile != null) {
             gameDirectory.setText(selectedFile.getAbsolutePath() + "\\" + gameName.getText());
             projectDir = new File(gameDirectory.getText());
         }
     }
+
+    /**
+     * called by {@link Controller#more} when tapped
+     */
     @FXML
-    private void more(){
+    private void more() {
         Main.dependencies.show();
     }
-
-
 }
