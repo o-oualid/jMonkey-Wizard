@@ -29,7 +29,7 @@ public class FileUtils {
 
         try {
 
-            BufferedReader reader = new BufferedReader(new FileReader(tmpPath));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(tmpPath)));
             StringBuilder out = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -42,7 +42,7 @@ public class FileUtils {
             createFileFromContent(path, name, out.toString());
 
         } catch (IOException e) {
-            messages.setText(messages.getText() + "Failed to create file: " + path + "/" + name + "\n");
+            messages.setText(messages.getText() + "\u26A0 Failed to create file: " + path + "/" + name + "\n");
             e.printStackTrace();
         } finally {
             closeFile();
@@ -65,7 +65,7 @@ public class FileUtils {
             bw.write(content);
             messages.setText(messages.getText() + "File successfully created: " + path + "/" + name + "\n");
         } catch (IOException e) {
-            messages.setText(messages.getText() + "Failed to create file: " + path + "/" + name + "\n");
+            messages.setText(messages.getText() + "\u26A0 Failed to create file: " + path + "/" + name + "\n");
         } finally {
             closeFile();
         }
@@ -81,7 +81,7 @@ public class FileUtils {
 
     void copyFile(String source, String dir) {
         try {
-            is = new FileInputStream(source);
+            is = ClassLoader.getSystemResourceAsStream(source);
             out = new FileOutputStream(new File(dir));
             byte[] buffer = new byte[1024];
             int length;
@@ -90,7 +90,7 @@ public class FileUtils {
             }
             messages.setText(messages.getText() + "File copied from: " + source + " to: " + dir + "\n");
         } catch (IOException e) {
-            messages.setText(messages.getText() + "Failed to copy file from: " + source + " to: " + dir + "\n");
+            messages.setText(messages.getText() + "\u26A0 Failed to copy file from: " + source + " to: " + dir + "\n");
         } finally {
             closeFile();
         }
@@ -150,7 +150,7 @@ public class FileUtils {
                 }
             }
         } else {
-            messages.setText(messages.getText() + "The template Directory: " + sourceFile.getAbsolutePath() + " is empty!\n");
+            messages.setText(messages.getText() + "\u26A0 The template Directory: " + sourceFile.getAbsolutePath() + " is empty!\n");
         }
     }
 
@@ -165,7 +165,7 @@ public class FileUtils {
         if (file.mkdirs()) {
             messages.setText(messages.getText() + "Folder successfully created: " + file.getPath() + "\n");
         } else {
-            messages.setText(messages.getText() + "Failed to create folder: " + file.getPath() + "\n");
+            messages.setText(messages.getText() + "\u26A0 Failed to create folder: " + file.getPath() + "\n");
         }
         return file;
 

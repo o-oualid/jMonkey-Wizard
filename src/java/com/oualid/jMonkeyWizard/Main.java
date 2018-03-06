@@ -23,15 +23,16 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(controller));
         primaryStage.setTitle("jMonkey Wizard");
         primaryStage.setResizable(false);
-       // primaryStage.getIcons().add(new Image("/icons/iconx.png"));
+       // primaryStage.getIcons().add(new Image("/icons/icon.png"));
         primaryStage.show();
-        primaryStage.setAlwaysOnTop(true);
+       // primaryStage.setAlwaysOnTop(true);
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/gui/Dependencies.fxml"));
-            dependencies.setTitle("Hello World");
+            dependencies.setTitle("More Dependencies");
             dependencies.setResizable(false);
             dependencies.initOwner(primaryStage);
             dependencies.setScene(new Scene(root));
+            //dependencies.getIcons().add(new Image("/icons/icon.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

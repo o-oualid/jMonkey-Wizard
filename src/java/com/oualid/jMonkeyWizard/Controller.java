@@ -92,6 +92,7 @@ public class Controller extends VBox {
         gameDirectory.setText(projectDir.getAbsolutePath());
         projectDir = new File(projectDir.getAbsolutePath());
         fileUtils = new FileUtils(messages);
+        jmeRelease.getSelectionModel().select(0);
         update();
     }
 
@@ -101,6 +102,9 @@ public class Controller extends VBox {
 
     @FXML
     private void build() {
+        if (projectDir.getAbsoluteFile().exists()){
+            messages.setText("Directory already exist choose an other one!");
+        }
         messages.setText("Build started" + "\n");
         progressBar.setProgress(10);
         modules = "";
@@ -211,16 +215,32 @@ public class Controller extends VBox {
         File androidMainDir = fileUtils.newDir(androidDir.getPath() + "/src/main");
         File androidJavaDir = fileUtils.newDir(androidMainDir.getPath() + "/java/" + gamePackage.getText().replace(".", "/"));
         File androidRes = fileUtils.newDir(androidMainDir + "/res");
+        File hdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-hdpi");
+        File mdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-mdpi");
+        File xdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xdpi");
+        File xxdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxdpi");
+        File xxxdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxxdpi");
         File androidValues = fileUtils.newDir(androidRes.getPath() + "/values");
 
-        fileUtils.copyDirectory("template/android/res", androidRes.getAbsolutePath());
+        //fileUtils.copyDirectory("template/android/res", androidRes.getAbsolutePath());
+
         fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
+        fileUtils.createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml");
+        fileUtils.createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml");
         fileUtils.createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
         fileUtils.createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
         fileUtils.createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
         fileUtils.createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/AndroidManifest.xml");
-
-        // add android necessary dependencies
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", mdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", mdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", hdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", hdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxdpi.getPath() + "/ic_launcher.png");
         androidDependencies = "project(\":android\")" +
                 " {\n" + "\t\tapply plugin: \"android\"\n" +
                 "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
@@ -308,7 +328,22 @@ public class Controller extends VBox {
 
     @FXML
     private void update() {
-        if (projectDir.exists()) {
+        if (projectDir.getAbsoluteFile().exists()) {
+            buildProject.setDisable(true);
+        } else {
+            buildProject.setDisable(false);
+        }
+        if (gameName.getText().isEmpty()) {
+            buildProject.setDisable(true);
+        } else {
+            buildProject.setDisable(false);
+        }
+        if (gamePackage.getText().isEmpty()) {
+            buildProject.setDisable(true);
+        } else {
+            buildProject.setDisable(false);
+        }
+        if (gameDirectory.getText().isEmpty()) {
             buildProject.setDisable(true);
         } else {
             buildProject.setDisable(false);
@@ -330,7 +365,6 @@ public class Controller extends VBox {
         }
 
         if (!desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected()) {
-            blender.setSelected(false);
             blender.setDisable(true);
 
 
@@ -348,12 +382,22 @@ public class Controller extends VBox {
             bullet.setDisable(false);
         }
 
-        if (bullet.isSelected()) {
-            jBullet.setSelected(false);
-        } else if (jBullet.isSelected()) {
-            bullet.setSelected(false);
-        }
+    }
 
+    /**
+     * called by {@link Controller#bullet} when modified
+     */
+    @FXML
+    private void updateBullet() {
+        jBullet.setSelected(false);
+    }
+
+    /**
+     * called by {@link Controller#jBullet} when modified
+     */
+    @FXML
+    private void updateJBullet() {
+        bullet.setSelected(false);
     }
 
     /**
@@ -393,8 +437,13 @@ public class Controller extends VBox {
         File selectedFile = directoryChooser.showDialog(Main.primaryStage);
         if (selectedFile != null) {
             gameDirectory.setText(selectedFile.getAbsolutePath() + "\\" + gameName.getText());
-            projectDir = new File(gameDirectory.getText());
+            updateDir();
         }
+    }
+    @FXML
+    private void updateDir(){
+        projectDir = new File(gameDirectory.getText());
+        projectDir = new File(projectDir.getAbsolutePath());
     }
 
     /**

@@ -2,51 +2,104 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@/style/style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oualid.jMonkeyWizard.Dependencies">
-
-    <columnConstraints>
-        <ColumnConstraints />
-        <ColumnConstraints maxWidth="126.0" minWidth="98.0" prefWidth="119.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="168.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="179.0" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+<GridPane stylesheets="@/style/style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oualid.jMonkeyWizard.Dependencies">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    </rowConstraints>
-    <CheckBox fx:id="lemur" mnemonicParsing="false" text="Lemur" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-    <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-    <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-    <CheckBox mnemonicParsing="false" text="TonegodGui" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-    <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-    <Label text="Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-    <Label text="Plugin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-    <Label prefHeight="21.0" prefWidth="148.0" text="UI toolkit" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-    <Label text="Gui" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-    <Label prefHeight="21.0" prefWidth="159.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-    <Label prefHeight="21.0" prefWidth="168.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-    <Label prefHeight="21.0" prefWidth="186.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-    <Label prefHeight="21.0" prefWidth="150.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-    <Label text="Version" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-    <TextField GridPane.columnIndex="3" GridPane.rowIndex="2" />
-    <TextField GridPane.columnIndex="3" GridPane.rowIndex="3" />
-    <TextField GridPane.columnIndex="3" GridPane.rowIndex="4" />
-    <TextField GridPane.columnIndex="3" GridPane.rowIndex="5" />
-    <TextField GridPane.columnIndex="3" GridPane.rowIndex="6" />
-    <TextField GridPane.columnIndex="3" GridPane.rowIndex="7" />
-   <Button mnemonicParsing="false" onAction="#ok" prefHeight="31.0" prefWidth="230.0" text="OK" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+   </rowConstraints>
+   <children>
+      <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="620.0" styleClass="root">
+          <content>
+              <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0">
+                  <columnConstraints>
+                      <ColumnConstraints />
+                      <ColumnConstraints maxWidth="177.0" minWidth="54.0" prefWidth="148.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="74.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="179.0" />
+                      <ColumnConstraints maxWidth="106.0" minWidth="40.0" prefWidth="94.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="120.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                      <RowConstraints />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                  <children>
+                      <CheckBox fx:id="lemur" mnemonicParsing="false" text="Lemur" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                      <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                      <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                      <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                      <CheckBox mnemonicParsing="false" text="TonegodGui" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                      <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                      <Label text="Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                      <Label prefHeight="21.0" prefWidth="183.0" text="Plugin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                      <Label prefHeight="21.0" prefWidth="148.0" text="UI toolkit" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                      <Label text="Gui" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                      <Label prefHeight="21.0" prefWidth="159.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                      <Label prefHeight="21.0" prefWidth="168.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                      <Label prefHeight="21.0" prefWidth="186.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                      <Label prefHeight="21.0" prefWidth="150.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                      <Label text="Version" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                      <TextField GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                      <TextField GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                      <TextField GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                      <TextField GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                      <TextField GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                      <TextField GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                      <Label prefHeight="21.0" prefWidth="239.0" text="Licence" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                      <Label prefHeight="21.0" prefWidth="135.0" text="New BSD" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                      <Label text="Label" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                      <Label text="Label" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                      <Label text="Label" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                      <Label text="Label" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+                      <Label text="Label" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+                      <Label text="Repo Link" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                      <Hyperlink text="Link" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                      <Hyperlink text="Hyperlink" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                      <Hyperlink text="Hyperlink" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                      <Hyperlink text="Hyperlink" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                      <Hyperlink text="Hyperlink" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                      <Hyperlink text="Hyperlink" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                  <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                  <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                  <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                  <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                  <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                  <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+                  </children>
+              </GridPane>
+          </content>
+      </ScrollPane>
+          <Button mnemonicParsing="false" onAction="#ok" prefHeight="33.0" prefWidth="620.0" text="OK" textAlignment="RIGHT" GridPane.rowIndex="1" />
+   </children>
 </GridPane>
