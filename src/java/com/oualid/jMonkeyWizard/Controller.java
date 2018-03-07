@@ -26,7 +26,13 @@ public class Controller extends VBox {
     @FXML
     private TextField jmeVersion;
     @FXML
+    private TextField gradleVersion;
+    @FXML
     private ComboBox jmeRelease;
+    @FXML
+    private ComboBox javaVersion;
+    @FXML
+    private ComboBox gradleType;
     @FXML
     private RadioButton jogl;
     @FXML
@@ -71,6 +77,7 @@ public class Controller extends VBox {
     private TextArea messages;
     @FXML
     private Button more;
+
     private String modules;
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
     private File projectDir;
@@ -93,6 +100,8 @@ public class Controller extends VBox {
         projectDir = new File(projectDir.getAbsolutePath());
         fileUtils = new FileUtils(messages);
         jmeRelease.getSelectionModel().select(0);
+        javaVersion.getSelectionModel().select(0);
+        gradleType.getSelectionModel().select(0);
         update();
     }
 
@@ -102,12 +111,22 @@ public class Controller extends VBox {
 
     @FXML
     private void build() {
-        if (projectDir.getAbsoluteFile().exists()){
+        if (projectDir.getAbsoluteFile().exists()) {
             messages.setText("Directory already exist choose an other one!");
+            return;
         }
+
+
         messages.setText("Build started" + "\n");
         progressBar.setProgress(10);
         modules = "";
+
+        specialWords.put("package", gamePackage.getText());
+        specialWords.put("gameName", gameName.getText());
+        specialWords.put("javaVersion", "" + javaVersion.getValue());
+        specialWords.put("gradleVersion", gradleVersion.getText() + "-" + gradleType.getValue());
+        specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getValue());
+
         addCore();
         addDependencies();
         specialWords.put("coreDependencies", coreDependencies);
@@ -140,7 +159,7 @@ public class Controller extends VBox {
 
         progressBar.setProgress(60);
 
-        specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getValue());
+
         fileUtils.createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
         fileUtils.createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
         progressBar.setProgress(80);
@@ -152,8 +171,6 @@ public class Controller extends VBox {
      */
 
     private void addCore() {
-        specialWords.put("package", gamePackage.getText());
-        specialWords.put("gameName", gameName.getText());
 
         projectDir = fileUtils.newDir(projectDir.getPath());
         File gradleDir = fileUtils.newDir(projectDir.getPath() + "/gradle/wrapper");
@@ -217,12 +234,10 @@ public class Controller extends VBox {
         File androidRes = fileUtils.newDir(androidMainDir + "/res");
         File hdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-hdpi");
         File mdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-mdpi");
-        File xdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xdpi");
-        File xxdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxdpi");
-        File xxxdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxxdpi");
+        File xhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xhdpi");
+        File xxhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxhdpi");
+        File xxxhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxxhdpi");
         File androidValues = fileUtils.newDir(androidRes.getPath() + "/values");
-
-        //fileUtils.copyDirectory("template/android/res", androidRes.getAbsolutePath());
 
         fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
         fileUtils.createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml");
@@ -235,12 +250,13 @@ public class Controller extends VBox {
         fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", mdpi.getPath() + "/ic_launcher.png");
         fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", hdpi.getPath() + "/ic_launcher_round.png");
         fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", hdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xhdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xhdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxhdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxhdpi.getPath() + "/ic_launcher.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxhdpi.getPath() + "/ic_launcher_round.png");
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxhdpi.getPath() + "/ic_launcher.png");
+
         androidDependencies = "project(\":android\")" +
                 " {\n" + "\t\tapply plugin: \"android\"\n" +
                 "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
@@ -251,9 +267,7 @@ public class Controller extends VBox {
                 "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n" +
                 androidDependencies + "\n\t}\n}";
         specialWords.put("androidDependencies", androidDependencies);
-        specialWords.put("androidClasspath", "classpath 'com.android.tools.build:gradle:2.3.0'\n" +
-                "        //if you you will use Intellij IDEA instead of Android Studio do not update android gradle plugin to 3.0.0 or more this will cause an issue, at least until an update Intellij IDEA update the android plugin.\n" +
-                "        ");
+        specialWords.put("androidClasspath", "classpath 'com.android.tools.build:gradle:3.0.1'");
         modules = modules + ", 'android'";
     }
 
@@ -440,8 +454,9 @@ public class Controller extends VBox {
             updateDir();
         }
     }
+
     @FXML
-    private void updateDir(){
+    private void updateDir() {
         projectDir = new File(gameDirectory.getText());
         projectDir = new File(projectDir.getAbsolutePath());
     }

@@ -20,13 +20,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root prefHeight="600.0" prefWidth="500.0" stylesheets="@/style/style.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="650.0" prefWidth="500.0" stylesheets="@/style/style.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
 
     <Pane prefHeight="89.0" prefWidth="500.0">
         <ImageView fitHeight="154.0" fitWidth="500.0" layoutX="4.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/jMonkeyLogo.png" />
         </ImageView>
     </Pane>
+   <Label text="Label" />
     <GridPane>
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="88.0" />
@@ -37,15 +38,17 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="147.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="127.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="138.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="137.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="137.0" />
             </columnConstraints>
             <children>
-                <TextField fx:id="jmeVersion" onAction="#update" text="3.2.1" />
+                <TextField fx:id="jmeVersion" onAction="#update" prefHeight="33.0" prefWidth="171.0" text="3.2.1" />
                 <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="155.0" text="Release:" textAlignment="RIGHT" GridPane.columnIndex="1" />
                 <ComboBox fx:id="jmeRelease" editable="true" prefWidth="150.0" GridPane.columnIndex="2">
                     <items>
@@ -58,6 +61,7 @@
             </children>
             <rowConstraints>
                 <RowConstraints />
+            <RowConstraints />
             </rowConstraints>
         </GridPane>
         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -79,6 +83,50 @@
         <TextField fx:id="gameName" onKeyTyped="#updateGameName" text="My Game" GridPane.columnIndex="1" />
         <TextField fx:id="gamePackage" onAction="#update" text="com.jmonkey.myGame" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <Label prefHeight="21.0" prefWidth="96.0" text="JME Version:" GridPane.rowIndex="3" />
+      <Label text="Java Version:" GridPane.rowIndex="4" />
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ComboBox fx:id="javaVersion" editable="true" prefWidth="150.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="1.8" />
+                        <String fx:value="1.7" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+         </children>
+      </GridPane>
+      <Label prefHeight="21.0" prefWidth="146.0" text="Gradle Version:" textAlignment="RIGHT" GridPane.rowIndex="5" />
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="gradleVersion" text="4.5.1" />
+            <Label alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="197.0" text="Type:" textAlignment="RIGHT" GridPane.columnIndex="1" />
+            <ComboBox fx:id="gradleType" prefWidth="150.0" GridPane.columnIndex="2">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="bin" />
+                        <String fx:value="all" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+         </children>
+      </GridPane>
     </GridPane>
     <Separator prefWidth="200.0" />
     <Label text="Sub Projects:" textFill="#0075ff" />
@@ -150,5 +198,5 @@
         </children>
     </GridPane>
    <Separator prefWidth="200.0" />
-    <TextArea fx:id="messages" editable="false" />
+    <TextArea fx:id="messages" editable="false" prefHeight="131.0" prefWidth="500.0" />
 </fx:root>

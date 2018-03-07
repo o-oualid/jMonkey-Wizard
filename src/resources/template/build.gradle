@@ -1,5 +1,3 @@
-package template
-
 buildscript {
     repositories {
         mavenCentral()
