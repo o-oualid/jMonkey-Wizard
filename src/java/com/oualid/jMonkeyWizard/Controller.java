@@ -466,6 +466,6 @@ public class Controller extends VBox {
      */
     @FXML
     private void more() {
-        Main.dependencies.show();
+        messages.setText("check again in an other release");
     }
 }

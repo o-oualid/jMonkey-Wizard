@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root prefHeight="650.0" prefWidth="500.0" stylesheets="@/style/style.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="650.0" maxWidth="650.0" minHeight="650.0" minWidth="500.0" prefHeight="650.0" prefWidth="500.0" stylesheets="@/style/style.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
 
     <Pane prefHeight="89.0" prefWidth="500.0">
         <ImageView fitHeight="154.0" fitWidth="500.0" layoutX="4.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">

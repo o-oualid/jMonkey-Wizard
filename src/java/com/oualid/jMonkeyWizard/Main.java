@@ -22,6 +22,8 @@ public class Main extends Application {
         Controller controller = new Controller();
         primaryStage.setScene(new Scene(controller));
         primaryStage.setTitle("jMonkey Wizard");
+        primaryStage.setWidth(500);
+        primaryStage.setHeight(650);
         primaryStage.setResizable(false);
        // primaryStage.getIcons().add(new Image("/icons/icon.png"));
         primaryStage.show();
@@ -32,6 +34,8 @@ public class Main extends Application {
             dependencies.setResizable(false);
             dependencies.initOwner(primaryStage);
             dependencies.setScene(new Scene(root));
+            dependencies.setWidth(600);
+            dependencies.setHeight(300);
             //dependencies.getIcons().add(new Image("/icons/icon.png"));
         } catch (IOException e) {
             e.printStackTrace();
