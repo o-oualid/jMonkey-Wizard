@@ -11,16 +11,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Controller extends VBox {
-
-    /**
-     * Variables  annotated by @FXML are initialized don't listen to your IDE
-     */
-
-    static HashMap<String, String> specialWords = new HashMap<>();
+   static HashMap<String, String> specialWords = new HashMap<>();
+    @FXML
+    TextField gamePackage;
     @FXML
     private TextField gameName;
-    @FXML
-    private TextField gamePackage;
     @FXML
     private TextField gameDirectory;
     @FXML
@@ -77,6 +72,12 @@ public class Controller extends VBox {
     private TextArea messages;
     @FXML
     private Button more;
+    @FXML
+    private TextField tmpPath;
+    @FXML
+    private Button browseTmp;
+    @FXML
+    private CheckBox customTmp;
 
     private String modules;
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
@@ -98,7 +99,7 @@ public class Controller extends VBox {
         projectDir = new File(gameName.getText());
         gameDirectory.setText(projectDir.getAbsolutePath());
         projectDir = new File(projectDir.getAbsolutePath());
-        fileUtils = new FileUtils(messages);
+        fileUtils = new FileUtils(this);
         jmeRelease.getSelectionModel().select(0);
         javaVersion.getSelectionModel().select(0);
         gradleType.getSelectionModel().select(0);
@@ -112,22 +113,32 @@ public class Controller extends VBox {
     @FXML
     private void build() {
         if (projectDir.getAbsoluteFile().exists()) {
-            messages.setText("Directory already exist choose an other one!");
+            newMessage("Directory already exist choose an other one!");
             return;
         }
+        if (customTmp.isSelected() && !new File(tmpPath.getText()).exists()) {
+            newMessage("Custom template path not found!");
+            return;
+        }
+        newMessage("Build started");
 
-
-        messages.setText("Build started" + "\n");
         progressBar.setProgress(10);
         modules = "";
-
         specialWords.put("package", gamePackage.getText());
         specialWords.put("gameName", gameName.getText());
         specialWords.put("javaVersion", "" + javaVersion.getValue());
         specialWords.put("gradleVersion", gradleVersion.getText() + "-" + gradleType.getValue());
         specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getValue());
 
+        if (customTmp.isSelected()) {
+            fileUtils.newDir(gameDirectory.getText());
+            fileUtils.copyDirectory(tmpPath.getText(), gameDirectory.getText());
+            newMessage("Build End");
+            progressBar.setProgress(100);
+            return;
+        }
         addCore();
+
         addDependencies();
         specialWords.put("coreDependencies", coreDependencies);
         progressBar.setProgress(20);
@@ -160,11 +171,12 @@ public class Controller extends VBox {
         progressBar.setProgress(60);
 
 
-        fileUtils.createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
+        fileUtils.createFileFromTmp(projectDir, "build.gradle", "template/build.gradle", true);
         fileUtils.createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
         progressBar.setProgress(80);
-        messages.setText(messages.getText() + "Build end");
+        newMessage("Build end");
     }
+
 
     /**
      * called by {@link Controller#build()} when the build start
@@ -189,14 +201,14 @@ public class Controller extends VBox {
         File coreDir = fileUtils.newDir(projectDir.getPath() + "/core"); //core folder
         File javaDir = fileUtils.newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));// core java folder
 
-        fileUtils.createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
-        fileUtils.createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
+        fileUtils.createFileFromTmp(javaDir, "Main.java", "template/core/Main.java", true);
+        fileUtils.createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle", true);
 
         // add jme3 core dependency to Core module
         coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
         // make gradle wrapper files
-        fileUtils.createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
-        fileUtils.copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
+        fileUtils.createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties", true);
+        fileUtils.copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar", true);
         progressBar.setProgress(30);
 
     }
@@ -209,8 +221,8 @@ public class Controller extends VBox {
         File desktopDir = fileUtils.newDir(projectDir.getPath() + "/desktop");
 
         File desktopJavaDir = fileUtils.newDir(desktopDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        fileUtils.createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
-        fileUtils.createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle");
+        fileUtils.createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java", true);
+        fileUtils.createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle", true);
         //add desktop necessary dependencies
         if (lwjgl3.isSelected()) {
             desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
@@ -239,23 +251,23 @@ public class Controller extends VBox {
         File xxxhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxxhdpi");
         File androidValues = fileUtils.newDir(androidRes.getPath() + "/values");
 
-        fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
-        fileUtils.createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml");
-        fileUtils.createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml");
-        fileUtils.createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
-        fileUtils.createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
-        fileUtils.createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
-        fileUtils.createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/AndroidManifest.xml");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", mdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", mdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", hdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", hdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xhdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xhdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxhdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxhdpi.getPath() + "/ic_launcher.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxhdpi.getPath() + "/ic_launcher_round.png");
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxhdpi.getPath() + "/ic_launcher.png");
+        fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml", true);
+        fileUtils.createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml", true);
+        fileUtils.createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml", true);
+        fileUtils.createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java", true);
+        fileUtils.createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle", true);
+        fileUtils.createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro", true);
+        fileUtils.createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/AndroidManifest.xml", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", mdpi.getPath() + "/ic_launcher_round.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", mdpi.getPath() + "/ic_launcher.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", hdpi.getPath() + "/ic_launcher_round.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", hdpi.getPath() + "/ic_launcher.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xhdpi.getPath() + "/ic_launcher_round.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xhdpi.getPath() + "/ic_launcher.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxhdpi.getPath() + "/ic_launcher_round.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxhdpi.getPath() + "/ic_launcher.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxhdpi.getPath() + "/ic_launcher_round.png", true);
+        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxhdpi.getPath() + "/ic_launcher.png", true);
 
         androidDependencies = "project(\":android\")" +
                 " {\n" + "\t\tapply plugin: \"android\"\n" +
@@ -277,8 +289,8 @@ public class Controller extends VBox {
     private void addIos() {
         File iosDir = fileUtils.newDir(projectDir.getPath() + "/ios");
         File iosJavaDir = fileUtils.newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        fileUtils.createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
-        fileUtils.createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle");
+        fileUtils.createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java", true);
+        fileUtils.createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle", true);
         // add ios necessary dependencies
         iosDependencies = "project(\":ios\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" + "\t\t\tcompile \"org.jmonkeyengine:jme3-ios:$JMonkey_version\"\n" + iosDependencies + "\n\t}\n}";
         specialWords.put("iosDependencies", iosDependencies);
@@ -293,8 +305,8 @@ public class Controller extends VBox {
     private void addVr() {
         File vrDir = fileUtils.newDir(projectDir.getPath() + "/vr");
         File vrJavaDir = fileUtils.newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        fileUtils.createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
-        fileUtils.createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle");
+        fileUtils.createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java", true);
+        fileUtils.createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle", true);
         //add vr necessary dependencies
         vrDependencies = "project(\":vr\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" + "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n" + vrDependencies + "\n\t}\n}";
         specialWords.put("vrDependencies", vrDependencies);
@@ -455,6 +467,20 @@ public class Controller extends VBox {
         }
     }
 
+    /**
+     * called by {@link Controller#browseTmp} when tapped
+     */
+    @FXML
+    private void browseTmp() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(projectDir.getParentFile());
+        File selectedFile = directoryChooser.showDialog(Main.primaryStage);
+        if (selectedFile != null) {
+            tmpPath.setText(selectedFile.getAbsolutePath());
+            updateDir();
+        }
+    }
+
     @FXML
     private void updateDir() {
         projectDir = new File(gameDirectory.getText());
@@ -466,6 +492,14 @@ public class Controller extends VBox {
      */
     @FXML
     private void more() {
-        messages.setText("check again in an other release");
+        newMessage("check again in an other release");
+    }
+
+    void newMessage(String text) {
+        if (messages.getText().isEmpty()) {
+            messages.setText(text);
+        } else {
+            messages.setText(messages.getText() + "\n" + text);
+        }
     }
 }
