@@ -1,101 +1,42 @@
 package com.oualid.jMonkeyWizard;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
-public class Controller extends VBox {
-   static HashMap<String, String> specialWords = new HashMap<>();
+public class Controller {
+    static HashMap<String, String> specialWords = new HashMap<>();
     @FXML
     TextField gamePackage;
     @FXML
-    private TextField gameName;
+    private TextField gameName, gameDirectory, jmeVersion, gradleVersion;
     @FXML
-    private TextField gameDirectory;
+    private ComboBox jmeRelease, javaVersion, gradleType;
     @FXML
-    private TextField jmeVersion;
+    private RadioButton jogl, lwjgl, lwjgl3;
     @FXML
-    private TextField gradleVersion;
-    @FXML
-    private ComboBox jmeRelease;
-    @FXML
-    private ComboBox javaVersion;
-    @FXML
-    private ComboBox gradleType;
-    @FXML
-    private RadioButton jogl;
-    @FXML
-    private RadioButton lwjgl;
-    @FXML
-    private RadioButton lwjgl3;
-    @FXML
-    private CheckBox desktop;
-    @FXML
-    private CheckBox android;
-    @FXML
-    private CheckBox ios;
-    @FXML
-    private CheckBox vr;
-    @FXML
-    private CheckBox jBullet;
-    @FXML
-    private CheckBox bullet;
-    @FXML
-    private CheckBox jogg;
-    @FXML
-    private CheckBox plugins;
-    @FXML
-    private CheckBox terrain;
-    @FXML
-    private CheckBox effects;
-    @FXML
-    private CheckBox blender;
-    @FXML
-    private CheckBox niftyGUI;
-    @FXML
-    private CheckBox examples;
-    @FXML
-    private CheckBox networking;
+    private CheckBox desktop, android, ios, vr, jBullet, bullet, jogg, plugins,
+            terrain, effects, blender, niftyGUI, examples, networking, customTmp;
     @FXML
     private Button buildProject;
-    @FXML
-    private Button browse;
     @FXML
     private ProgressBar progressBar;
     @FXML
     private TextArea messages;
     @FXML
-    private Button more;
-    @FXML
     private TextField tmpPath;
-    @FXML
-    private Button browseTmp;
-    @FXML
-    private CheckBox customTmp;
 
     private String modules;
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
     private File projectDir;
     private FileUtils fileUtils;
 
-    /**
-     * the constructor of this class
-     */
-    Controller() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/ui.fxml"));
-        fxmlLoader.setController(this);
-        fxmlLoader.setRoot(this);
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+
+    @FXML
+    public void initialize() {
         projectDir = new File(gameName.getText());
         gameDirectory.setText(projectDir.getAbsolutePath());
         projectDir = new File(projectDir.getAbsolutePath());
@@ -142,31 +83,24 @@ public class Controller extends VBox {
         addDependencies();
         specialWords.put("coreDependencies", coreDependencies);
         progressBar.setProgress(20);
-        if (desktop.isSelected()) {
-            addDesktop();
-        } else {
-            specialWords.put("desktopDependencies", "");
+        if (desktop.isSelected()) addDesktop();
+        else specialWords.put("desktopDependencies", "");
 
-        }
+
         progressBar.setProgress(30);
-        if (android.isSelected()) {
-            addAndroid();
-        } else {
+        if (android.isSelected()) addAndroid();
+        else {
             specialWords.put("androidDependencies", "");
             specialWords.put("androidClasspath", "");
         }
         progressBar.setProgress(40);
-        if (ios.isSelected()) {
-            addIos();
-        } else {
-            specialWords.put("iosDependencies", "");
-        }
+        if (ios.isSelected()) addIos();
+        else specialWords.put("iosDependencies", "");
+
         progressBar.setProgress(50);
-        if (vr.isSelected()) {
-            addVr();
-        } else {
-            specialWords.put("vrDependencies", "");
-        }
+        if (vr.isSelected()) addVr();
+        else specialWords.put("vrDependencies", "");
+
 
         progressBar.setProgress(60);
 
@@ -224,14 +158,21 @@ public class Controller extends VBox {
         fileUtils.createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java", true);
         fileUtils.createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle", true);
         //add desktop necessary dependencies
-        if (lwjgl3.isSelected()) {
+        if (lwjgl3.isSelected())
             desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
-        } else if (lwjgl.isSelected()) {
+        else if (lwjgl.isSelected())
             desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl:$JMonkey_version\"\n";
-        } else if (jogl.isSelected()) {
+        else if (jogl.isSelected())
             desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-jogl:$JMonkey_version\"\n";
-        }
-        desktopDependencies = "project(\":desktop\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tapply plugin: \"idea\"\n" + "\t\tidea {\n" + "\t\t\tmodule {\n" + "\t\t\t\tscopes.PROVIDED.minus += [configurations.compile]\n" + "\t\t\t\tscopes.COMPILE.plus += [configurations.compile]\n" + "        }\n" + "    }\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" + "\t\t\tcompile \"org.junit.platform:junit-platform-launcher:$junitPlatform_version\"\n" + "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n" + desktopDependencies + "\n\t}\n}";
+
+        desktopDependencies = "project(\":desktop\") {\n" + "\t\tapply plugin: \"java\"\n" +
+                "\t\tapply plugin: \"idea\"\n" + "\t\tidea {\n" + "\t\t\tmodule {\n" +
+                "\t\t\t\tscopes.PROVIDED.minus += [configurations.compile]\n" +
+                "\t\t\t\tscopes.COMPILE.plus += [configurations.compile]\n" +
+                "        }\n" + "    }\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile \"org.junit.platform:junit-platform-launcher:$junitPlatform_version\"\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n" + desktopDependencies + "\n\t}\n}";
+
         specialWords.put("desktopDependencies", desktopDependencies);
         modules = modules + ", 'desktop'";
     }
@@ -292,7 +233,8 @@ public class Controller extends VBox {
         fileUtils.createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java", true);
         fileUtils.createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle", true);
         // add ios necessary dependencies
-        iosDependencies = "project(\":ios\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" + "\t\t\tcompile \"org.jmonkeyengine:jme3-ios:$JMonkey_version\"\n" + iosDependencies + "\n\t}\n}";
+        iosDependencies = "project(\":ios\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-ios:$JMonkey_version\"\n" + iosDependencies + "\n\t}\n}";
         specialWords.put("iosDependencies", iosDependencies);
         modules = modules + ", 'ios'";
 
@@ -308,7 +250,8 @@ public class Controller extends VBox {
         fileUtils.createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java", true);
         fileUtils.createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle", true);
         //add vr necessary dependencies
-        vrDependencies = "project(\":vr\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" + "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n" + vrDependencies + "\n\t}\n}";
+        vrDependencies = "project(\":vr\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n" + vrDependencies + "\n\t}\n}";
         specialWords.put("vrDependencies", vrDependencies);
         modules = modules + ", 'vr'";
     }
@@ -318,67 +261,56 @@ public class Controller extends VBox {
      */
 
     private void addDependencies() {
-
         if (bullet.isSelected()) {
             desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native:$JMonkey_version\"\n";
             androidDependencies = androidDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"\n";
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet:$JMonkey_version\"\n";
-        } else if (jBullet.isSelected()) {
+        } else if (jBullet.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jbullet:$JMonkey_version\"\n";
-        }
-        if (terrain.isSelected()) {
+
+        if (terrain.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-terrain:$JMonkey_version\"\n";
-        }
-        if (niftyGUI.isSelected()) {
+
+        if (niftyGUI.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-niftygui:$JMonkey_version\"\n";
-        }
-        if (effects.isSelected()) {
+
+        if (effects.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-effects:$JMonkey_version\"\n";
-        }
-        if (plugins.isSelected()) {
+
+        if (plugins.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-plugins:$JMonkey_version\"\n";
-        }
-        if (blender.isSelected()) {
+
+        if (blender.isSelected())
             desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-blender:$JMonkey_version\"\n";
-        }
-        if (jogg.isSelected()) {
+
+        if (jogg.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jogg:$JMonkey_version\"\n";
-        }
-        if (networking.isSelected()) {
+
+        if (networking.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-networking:$JMonkey_version\"\n";
-        }
-        if (examples.isSelected()) {
+
+        if (examples.isSelected())
             coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-examples:$JMonkey_version\"\n";
-        }
     }
 
     @FXML
     private void update() {
-        if (projectDir.getAbsoluteFile().exists()) {
-            buildProject.setDisable(true);
-        } else {
+        if (projectDir.getAbsoluteFile().exists()) buildProject.setDisable(true);
+        else buildProject.setDisable(false);
+
+        if (gameName.getText().isEmpty()) buildProject.setDisable(true);
+        else buildProject.setDisable(false);
+
+        if (gamePackage.getText().isEmpty()) buildProject.setDisable(true);
+        else buildProject.setDisable(false);
+
+        if (gameDirectory.getText().isEmpty()) buildProject.setDisable(true);
+        else buildProject.setDisable(false);
+
+        if (desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())
             buildProject.setDisable(false);
-        }
-        if (gameName.getText().isEmpty()) {
-            buildProject.setDisable(true);
-        } else {
-            buildProject.setDisable(false);
-        }
-        if (gamePackage.getText().isEmpty()) {
-            buildProject.setDisable(true);
-        } else {
-            buildProject.setDisable(false);
-        }
-        if (gameDirectory.getText().isEmpty()) {
-            buildProject.setDisable(true);
-        } else {
-            buildProject.setDisable(false);
-        }
-        if (!(desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())) {
-            buildProject.setDisable(true);
-        } else {
-            buildProject.setDisable(false);
-        }
+        else buildProject.setDisable(true);
+
 
         if (desktop.isSelected()) {
             lwjgl3.setDisable(false);
@@ -390,23 +322,18 @@ public class Controller extends VBox {
             lwjgl.setDisable(true);
         }
 
-        if (!desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected()) {
+        if (!desktop.isSelected() || android.isSelected() || ios.isSelected() || vr.isSelected())
             blender.setDisable(true);
+        else blender.setDisable(false);
 
-
-        } else {
-
-            blender.setDisable(false);
-        }
         if (ios.isSelected() || vr.isSelected()) {
             bullet.setDisable(true);
             if (bullet.isSelected()) {
                 bullet.setSelected(false);
                 jBullet.setSelected(true);
             }
-        } else {
-            bullet.setDisable(false);
-        }
+        } else bullet.setDisable(false);
+
 
     }
 
@@ -454,7 +381,7 @@ public class Controller extends VBox {
     }
 
     /**
-     * called by {@link Controller#browse} when tapped
+     * called by {#browse} when tapped
      */
     @FXML
     private void browse() {
@@ -468,7 +395,7 @@ public class Controller extends VBox {
     }
 
     /**
-     * called by {@link Controller#browseTmp} when tapped
+     * called by {#browseTmp} when tapped
      */
     @FXML
     private void browseTmp() {
@@ -488,18 +415,16 @@ public class Controller extends VBox {
     }
 
     /**
-     * called by {@link Controller#more} when tapped
+     * called by {#more} when tapped
      */
     @FXML
     private void more() {
-        newMessage("check again in an other release");
+        Main.dependencies.show();
     }
 
     void newMessage(String text) {
-        if (messages.getText().isEmpty()) {
-            messages.setText(text);
-        } else {
-            messages.setText(messages.getText() + "\n" + text);
-        }
+        if (messages.getText().isEmpty()) messages.setText(text);
+        else messages.setText(messages.getText() + "\n" + text);
+
     }
 }

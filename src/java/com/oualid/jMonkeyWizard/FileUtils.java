@@ -2,7 +2,7 @@ package com.oualid.jMonkeyWizard;
 
 import java.io.*;
 
-public class FileUtils {
+class FileUtils {
     private InputStream is;
     private OutputStream out;
     private BufferedWriter bw = null;
