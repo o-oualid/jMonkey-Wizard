@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity" prefHeight="700.0" stylesheets="@/style/style.css" xmlns="http://javafx.com/javafx/8.0.121"
-      fx:controller="com.oualid.jMonkeyWizard.Controller">
+      fx:controller="com.oualid.jMonkeyWizard.MainUi">
 
     <Pane prefHeight="89.0" prefWidth="500.0">
         <ImageView fitHeight="154.0" fitWidth="500.0" layoutX="4.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Main extends Application {
+public class App extends Application {
     static Stage dependencies = new Stage();
     static Stage primaryStage;
 
@@ -18,11 +18,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Main.primaryStage = primaryStage;
+        App.primaryStage = primaryStage;
         try {
-            Parent primaryStageRoot = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
             primaryStage.setTitle("jMonkey Wizard");
-            primaryStage.setScene(new Scene(primaryStageRoot));
+            primaryStage.setScene(new Scene(parent));
             primaryStage.setResizable(false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,4 +42,6 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
+
 }

@@ -14,6 +14,6 @@ public class Dependencies {
 
     @FXML
     void ok() {
-        Main.dependencies.hide();
+        App.dependencies.hide();
     }
 }

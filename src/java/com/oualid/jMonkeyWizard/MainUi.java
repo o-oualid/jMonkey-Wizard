@@ -7,7 +7,9 @@ import javafx.stage.DirectoryChooser;
 import java.io.File;
 import java.util.HashMap;
 
-public class Controller {
+import static com.oualid.jMonkeyWizard.FileUtils.*;
+
+public class MainUi {
     static HashMap<String, String> specialWords = new HashMap<>();
     @FXML
     TextField gamePackage;
@@ -32,7 +34,6 @@ public class Controller {
     private String modules;
     private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
     private File projectDir;
-    private FileUtils fileUtils;
 
 
     @FXML
@@ -40,7 +41,6 @@ public class Controller {
         projectDir = new File(gameName.getText());
         gameDirectory.setText(projectDir.getAbsolutePath());
         projectDir = new File(projectDir.getAbsolutePath());
-        fileUtils = new FileUtils(this);
         jmeRelease.getSelectionModel().select(0);
         javaVersion.getSelectionModel().select(0);
         gradleType.getSelectionModel().select(0);
@@ -48,20 +48,20 @@ public class Controller {
     }
 
     /**
-     * called by {@link Controller#buildProject} when clicked
+     * called by {@link MainUi#buildProject} when clicked
      */
 
     @FXML
     private void build() {
         if (projectDir.getAbsoluteFile().exists()) {
-            newMessage("Directory already exist choose an other one!");
+            printMessage("Directory already exist choose an other one!");
             return;
         }
         if (customTmp.isSelected() && !new File(tmpPath.getText()).exists()) {
-            newMessage("Custom template path not found!");
+            printMessage("Custom template path not found!");
             return;
         }
-        newMessage("Build started");
+        printMessage("Build started");
 
         progressBar.setProgress(10);
         modules = "";
@@ -72,9 +72,9 @@ public class Controller {
         specialWords.put("jmeV", jmeVersion.getText() + "-" + jmeRelease.getValue());
 
         if (customTmp.isSelected()) {
-            fileUtils.newDir(gameDirectory.getText());
-            fileUtils.copyDirectory(tmpPath.getText(), gameDirectory.getText());
-            newMessage("Build End");
+            newDir(gameDirectory.getText());
+            copyDirectory(tmpPath.getText(), gameDirectory.getText(), gamePackage.getText());
+            printMessage("Build End");
             progressBar.setProgress(100);
             return;
         }
@@ -101,197 +101,13 @@ public class Controller {
         if (vr.isSelected()) addVr();
         else specialWords.put("vrDependencies", "");
 
-
         progressBar.setProgress(60);
-
-
-        fileUtils.createFileFromTmp(projectDir, "build.gradle", "template/build.gradle", true);
-        fileUtils.createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
+        createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
+        createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
         progressBar.setProgress(80);
-        newMessage("Build end");
+        printMessage("Build end");
     }
 
-
-    /**
-     * called by {@link Controller#build()} when the build start
-     */
-
-    private void addCore() {
-
-        projectDir = fileUtils.newDir(projectDir.getPath());
-        File gradleDir = fileUtils.newDir(projectDir.getPath() + "/gradle/wrapper");
-        File assetsDir = fileUtils.newDir(projectDir.getPath() + "/assets");
-
-        // sub assets folders
-        fileUtils.newDir(assetsDir.getPath() + "/Interface");
-        fileUtils.newDir(assetsDir.getPath() + "/MatDefs");
-        fileUtils.newDir(assetsDir.getPath() + "/Materials");
-        fileUtils.newDir(assetsDir.getPath() + "/Models");
-        fileUtils.newDir(assetsDir.getPath() + "/Scenes");
-        fileUtils.newDir(assetsDir.getPath() + "/Shaders");
-        fileUtils.newDir(assetsDir.getPath() + "/Sounds");
-        fileUtils.newDir(assetsDir.getPath() + "/Textures");
-
-        File coreDir = fileUtils.newDir(projectDir.getPath() + "/core"); //core folder
-        File javaDir = fileUtils.newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));// core java folder
-
-        fileUtils.createFileFromTmp(javaDir, "Main.java", "template/core/Main.java", true);
-        fileUtils.createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle", true);
-
-        // add jme3 core dependency to Core module
-        coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
-        // make gradle wrapper files
-        fileUtils.createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties", true);
-        fileUtils.copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar", true);
-        progressBar.setProgress(30);
-
-    }
-
-    /**
-     * called by {@link Controller#build()} if {@link Controller#desktop} is selected
-     */
-
-    private void addDesktop() {
-        File desktopDir = fileUtils.newDir(projectDir.getPath() + "/desktop");
-
-        File desktopJavaDir = fileUtils.newDir(desktopDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        fileUtils.createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java", true);
-        fileUtils.createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle", true);
-        //add desktop necessary dependencies
-        if (lwjgl3.isSelected())
-            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
-        else if (lwjgl.isSelected())
-            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl:$JMonkey_version\"\n";
-        else if (jogl.isSelected())
-            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-jogl:$JMonkey_version\"\n";
-
-        desktopDependencies = "project(\":desktop\") {\n" + "\t\tapply plugin: \"java\"\n" +
-                "\t\tapply plugin: \"idea\"\n" + "\t\tidea {\n" + "\t\t\tmodule {\n" +
-                "\t\t\t\tscopes.PROVIDED.minus += [configurations.compile]\n" +
-                "\t\t\t\tscopes.COMPILE.plus += [configurations.compile]\n" +
-                "        }\n" + "    }\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile \"org.junit.platform:junit-platform-launcher:$junitPlatform_version\"\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n" + desktopDependencies + "\n\t}\n}";
-
-        specialWords.put("desktopDependencies", desktopDependencies);
-        modules = modules + ", 'desktop'";
-    }
-
-    /**
-     * called by {@link Controller#build()} if {@link Controller#android} is selected
-     */
-    private void addAndroid() {
-        File androidDir = fileUtils.newDir(projectDir.getPath() + "/android");
-        File androidMainDir = fileUtils.newDir(androidDir.getPath() + "/src/main");
-        File androidJavaDir = fileUtils.newDir(androidMainDir.getPath() + "/java/" + gamePackage.getText().replace(".", "/"));
-        File androidRes = fileUtils.newDir(androidMainDir + "/res");
-        File hdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-hdpi");
-        File mdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-mdpi");
-        File xhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xhdpi");
-        File xxhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxhdpi");
-        File xxxhdpi = fileUtils.newDir(androidRes.getPath() + "/mipmap-xxxhdpi");
-        File androidValues = fileUtils.newDir(androidRes.getPath() + "/values");
-
-        fileUtils.createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml", true);
-        fileUtils.createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml", true);
-        fileUtils.createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml", true);
-        fileUtils.createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java", true);
-        fileUtils.createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle", true);
-        fileUtils.createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro", true);
-        fileUtils.createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/AndroidManifest.xml", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", mdpi.getPath() + "/ic_launcher_round.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", mdpi.getPath() + "/ic_launcher.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", hdpi.getPath() + "/ic_launcher_round.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", hdpi.getPath() + "/ic_launcher.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xhdpi.getPath() + "/ic_launcher_round.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xhdpi.getPath() + "/ic_launcher.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxhdpi.getPath() + "/ic_launcher_round.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxhdpi.getPath() + "/ic_launcher.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxhdpi.getPath() + "/ic_launcher_round.png", true);
-        fileUtils.copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxhdpi.getPath() + "/ic_launcher.png", true);
-
-        androidDependencies = "project(\":android\")" +
-                " {\n" + "\t\tapply plugin: \"android\"\n" +
-                "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile fileTree(dir: 'libs', include: ['*.jar'])\n" +
-                "\t\t\ttestCompile 'junit:junit:4.12'\n" +
-                "\t\t\tcompile 'com.android.support:appcompat-v7:27.1.0'\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-android:$JMonkey_version\"\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n" +
-                androidDependencies + "\n\t}\n}";
-        specialWords.put("androidDependencies", androidDependencies);
-        specialWords.put("androidClasspath", "classpath 'com.android.tools.build:gradle:3.0.1'");
-        modules = modules + ", 'android'";
-    }
-
-    /**
-     * called by {@link Controller#build()} if {@link Controller#ios} is selected
-     */
-    private void addIos() {
-        File iosDir = fileUtils.newDir(projectDir.getPath() + "/ios");
-        File iosJavaDir = fileUtils.newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        fileUtils.createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java", true);
-        fileUtils.createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle", true);
-        // add ios necessary dependencies
-        iosDependencies = "project(\":ios\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-ios:$JMonkey_version\"\n" + iosDependencies + "\n\t}\n}";
-        specialWords.put("iosDependencies", iosDependencies);
-        modules = modules + ", 'ios'";
-
-    }
-
-    /**
-     * called by {@link Controller#build()} if {@link Controller#vr} is selected
-     */
-
-    private void addVr() {
-        File vrDir = fileUtils.newDir(projectDir.getPath() + "/vr");
-        File vrJavaDir = fileUtils.newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        fileUtils.createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java", true);
-        fileUtils.createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle", true);
-        //add vr necessary dependencies
-        vrDependencies = "project(\":vr\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n" + vrDependencies + "\n\t}\n}";
-        specialWords.put("vrDependencies", vrDependencies);
-        modules = modules + ", 'vr'";
-    }
-
-    /**
-     * called by {@link Controller#build()}
-     */
-
-    private void addDependencies() {
-        if (bullet.isSelected()) {
-            desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native:$JMonkey_version\"\n";
-            androidDependencies = androidDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"\n";
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet:$JMonkey_version\"\n";
-        } else if (jBullet.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jbullet:$JMonkey_version\"\n";
-
-        if (terrain.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-terrain:$JMonkey_version\"\n";
-
-        if (niftyGUI.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-niftygui:$JMonkey_version\"\n";
-
-        if (effects.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-effects:$JMonkey_version\"\n";
-
-        if (plugins.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-plugins:$JMonkey_version\"\n";
-
-        if (blender.isSelected())
-            desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-blender:$JMonkey_version\"\n";
-
-        if (jogg.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jogg:$JMonkey_version\"\n";
-
-        if (networking.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-networking:$JMonkey_version\"\n";
-
-        if (examples.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-examples:$JMonkey_version\"\n";
-    }
 
     @FXML
     private void update() {
@@ -338,7 +154,7 @@ public class Controller {
     }
 
     /**
-     * called by {@link Controller#bullet} when modified
+     * called by {@link MainUi#bullet} when modified
      */
     @FXML
     private void updateBullet() {
@@ -346,15 +162,197 @@ public class Controller {
     }
 
     /**
-     * called by {@link Controller#jBullet} when modified
+     * called by {@link MainUi#jBullet} when modified
      */
     @FXML
     private void updateJBullet() {
         bullet.setSelected(false);
     }
 
+
     /**
-     * called by {@link Controller#gameName} when modified
+     * called by {@link MainUi#build()} when the build start
+     */
+
+    private void addCore() {
+
+        projectDir = newDir(projectDir.getPath());
+        File gradleDir = newDir(projectDir.getPath() + "/gradle/wrapper");
+        File assetsDir = newDir(projectDir.getPath() + "/assets");
+
+        // sub assets folders
+        newDir(assetsDir.getPath() + "/Interface");
+        newDir(assetsDir.getPath() + "/MatDefs");
+        newDir(assetsDir.getPath() + "/Materials");
+        newDir(assetsDir.getPath() + "/Models");
+        newDir(assetsDir.getPath() + "/Scenes");
+        newDir(assetsDir.getPath() + "/Shaders");
+        newDir(assetsDir.getPath() + "/Sounds");
+        newDir(assetsDir.getPath() + "/Textures");
+
+        File coreDir = newDir(projectDir.getPath() + "/core"); //core folder
+        File javaDir = newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));// core java folder
+
+        createFileFromTmp(javaDir, "App.java", "template/core/Main.java");
+        createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
+
+        // add jme3 core dependency to Core module
+        coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
+        // make gradle wrapper files
+        createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
+        copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
+        progressBar.setProgress(30);
+
+    }
+
+    /**
+     * called by {@link MainUi#build()} if {@link MainUi#desktop} is selected
+     */
+
+    private void addDesktop() {
+        File desktopDir = newDir(projectDir.getPath() + "/desktop");
+
+        File desktopJavaDir = newDir(desktopDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
+        createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
+        createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle");
+        //add desktop necessary dependencies
+        if (lwjgl3.isSelected())
+            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
+        else if (lwjgl.isSelected())
+            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl:$JMonkey_version\"\n";
+        else if (jogl.isSelected())
+            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-jogl:$JMonkey_version\"\n";
+
+        desktopDependencies = "project(\":desktop\") {\n" + "\t\tapply plugin: \"java\"\n" +
+                "\t\tapply plugin: \"idea\"\n" + "\t\tidea {\n" + "\t\t\tmodule {\n" +
+                "\t\t\t\tscopes.PROVIDED.minus += [configurations.compile]\n" +
+                "\t\t\t\tscopes.COMPILE.plus += [configurations.compile]\n" +
+                "        }\n" + "    }\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile \"org.junit.platform:junit-platform-launcher:$junitPlatform_version\"\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n" + desktopDependencies + "\n\t}\n}";
+
+        specialWords.put("desktopDependencies", desktopDependencies);
+        modules = modules + ", 'desktop'";
+    }
+
+    /**
+     * called by {@link MainUi#build()} if {@link MainUi#android} is selected
+     */
+    private void addAndroid() {
+        File androidDir = newDir(projectDir.getPath() + "/android");
+        File androidMainDir = newDir(androidDir.getPath() + "/src/main");
+        File androidJavaDir = newDir(androidMainDir.getPath() + "/java/" + gamePackage.getText().replace(".", "/"));
+        File androidRes = newDir(androidMainDir + "/res");
+        File hdpi = newDir(androidRes.getPath() + "/mipmap-hdpi");
+        File mdpi = newDir(androidRes.getPath() + "/mipmap-mdpi");
+        File xhdpi = newDir(androidRes.getPath() + "/mipmap-xhdpi");
+        File xxhdpi = newDir(androidRes.getPath() + "/mipmap-xxhdpi");
+        File xxxhdpi = newDir(androidRes.getPath() + "/mipmap-xxxhdpi");
+        File androidValues = newDir(androidRes.getPath() + "/values");
+
+        createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
+        createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml");
+        createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml");
+        createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
+        createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
+        createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
+        createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/AndroidManifest.xml");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", mdpi.getPath() + "/ic_launcher_round.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", mdpi.getPath() + "/ic_launcher.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", hdpi.getPath() + "/ic_launcher_round.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", hdpi.getPath() + "/ic_launcher.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xhdpi.getPath() + "/ic_launcher_round.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xhdpi.getPath() + "/ic_launcher.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxhdpi.getPath() + "/ic_launcher_round.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxhdpi.getPath() + "/ic_launcher.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxhdpi.getPath() + "/ic_launcher_round.png");
+        copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxhdpi.getPath() + "/ic_launcher.png");
+
+        androidDependencies = "project(\":android\")" +
+                " {\n" + "\t\tapply plugin: \"android\"\n" +
+                "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile fileTree(dir: 'libs', include: ['*.jar'])\n" +
+                "\t\t\ttestCompile 'junit:junit:4.12'\n" +
+                "\t\t\tcompile 'com.android.support:appcompat-v7:27.1.0'\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-android:$JMonkey_version\"\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n" +
+                androidDependencies + "\n\t}\n}";
+        specialWords.put("androidDependencies", androidDependencies);
+        specialWords.put("androidClasspath", "classpath 'com.android.tools.build:gradle:3.0.1'");
+        modules = modules + ", 'android'";
+    }
+
+    /**
+     * called by {@link MainUi#build()} if {@link MainUi#ios} is selected
+     */
+    private void addIos() {
+        File iosDir = newDir(projectDir.getPath() + "/ios");
+        File iosJavaDir = newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
+        createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
+        createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle");
+        // add ios necessary dependencies
+        iosDependencies = "project(\":ios\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-ios:$JMonkey_version\"\n" + iosDependencies + "\n\t}\n}";
+        specialWords.put("iosDependencies", iosDependencies);
+        modules = modules + ", 'ios'";
+
+    }
+
+    /**
+     * called by {@link MainUi#build()} if {@link MainUi#vr} is selected
+     */
+
+    private void addVr() {
+        File vrDir = newDir(projectDir.getPath() + "/vr");
+        File vrJavaDir = newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
+        createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
+        createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle");
+        //add vr necessary dependencies
+        vrDependencies = "project(\":vr\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
+                "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n" + vrDependencies + "\n\t}\n}";
+        specialWords.put("vrDependencies", vrDependencies);
+        modules = modules + ", 'vr'";
+    }
+
+    /**
+     * called by {@link MainUi#build()}
+     */
+
+    private void addDependencies() {
+        if (bullet.isSelected()) {
+            desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native:$JMonkey_version\"\n";
+            androidDependencies = androidDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"\n";
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet:$JMonkey_version\"\n";
+        } else if (jBullet.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jbullet:$JMonkey_version\"\n";
+
+        if (terrain.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-terrain:$JMonkey_version\"\n";
+
+        if (niftyGUI.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-niftygui:$JMonkey_version\"\n";
+
+        if (effects.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-effects:$JMonkey_version\"\n";
+
+        if (plugins.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-plugins:$JMonkey_version\"\n";
+
+        if (blender.isSelected())
+            desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-blender:$JMonkey_version\"\n";
+
+        if (jogg.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jogg:$JMonkey_version\"\n";
+
+        if (networking.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-networking:$JMonkey_version\"\n";
+
+        if (examples.isSelected())
+            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-examples:$JMonkey_version\"\n";
+    }
+
+    /**
+     * called by {@link MainUi#gameName} when modified
      */
     @FXML
     private void updateGameName() {
@@ -387,7 +385,7 @@ public class Controller {
     private void browse() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(projectDir.getParentFile());
-        File selectedFile = directoryChooser.showDialog(Main.primaryStage);
+        File selectedFile = directoryChooser.showDialog(App.primaryStage);
         if (selectedFile != null) {
             gameDirectory.setText(selectedFile.getAbsolutePath() + "\\" + gameName.getText());
             updateDir();
@@ -401,7 +399,7 @@ public class Controller {
     private void browseTmp() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(projectDir.getParentFile());
-        File selectedFile = directoryChooser.showDialog(Main.primaryStage);
+        File selectedFile = directoryChooser.showDialog(App.primaryStage);
         if (selectedFile != null) {
             tmpPath.setText(selectedFile.getAbsolutePath());
             updateDir();
@@ -419,12 +417,11 @@ public class Controller {
      */
     @FXML
     private void more() {
-        Main.dependencies.show();
+        App.dependencies.show();
     }
 
-    void newMessage(String text) {
+    private void printMessage(String text) {
         if (messages.getText().isEmpty()) messages.setText(text);
         else messages.setText(messages.getText() + "\n" + text);
-
     }
 }
