@@ -1,22 +1,12 @@
-version '1.0'
 apply plugin: 'java'
-sourceSets.main.resources.srcDirs(["src/resources"])
-sourceSets.main.java.srcDirs = [ "src/java" ]
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
+def platform = 'linux'
 
-    }
-}
 repositories {
     mavenCentral()
-    jcenter()
-
 }
-
 dependencies {
-
+    implementation "org.openjfx:javafx-base:11:$platform"
+    implementation "org.openjfx:javafx-graphics:11:$platform"
+    implementation "org.openjfx:javafx-controls:11:$platform"
+    implementation "org.openjfx:javafx-fxml:11:$platform"
 }
