@@ -324,21 +324,21 @@ public class MainUi {
         } else if (jBullet.isSelected())
             addCoreDependency("${jme3.g}:jme3-jbullet:${jme3.v}");
 
-        if (terrain.isSelected()) addCoreDependency("${jme3.g}:jme3-terrain{jme3.v}");
+        if (terrain.isSelected()) addCoreDependency("${jme3.g}:jme3-terrain${jme3.v}");
 
-        if (niftyGUI.isSelected()) addCoreDependency("${jme3.g}:jme3-niftygui{jme3.v}");
+        if (niftyGUI.isSelected()) addCoreDependency("${jme3.g}:jme3-niftygui${jme3.v}");
 
-        if (effects.isSelected()) addCoreDependency("${jme3.g}:jme3-effects{jme3.v}");
+        if (effects.isSelected()) addCoreDependency("${jme3.g}:jme3-effects${jme3.v}");
 
-        if (plugins.isSelected()) addCoreDependency("${jme3.g}:jme3-plugins{jme3.v}");
+        if (plugins.isSelected()) addCoreDependency("${jme3.g}:jme3-plugins${jme3.v}");
 
-        if (blender.isSelected()) addDesktopDependency("${jme3.g}:jme3-blender{jme3.v}");
+        if (blender.isSelected()) addDesktopDependency("${jme3.g}:jme3-blender${jme3.v}");
 
-        if (jogg.isSelected()) addCoreDependency("${jme3.g}:jme3-jogg{jme3.v}");
+        if (jogg.isSelected()) addCoreDependency("${jme3.g}:jme3-jogg${jme3.v}");
 
-        if (networking.isSelected()) addCoreDependency("${jme3.g}:jme3-networking{jme3.v}");
+        if (networking.isSelected()) addCoreDependency("${jme3.g}:jme3-networking${jme3.v}");
 
-        if (examples.isSelected()) addCoreDependency("${jme3.g}:jme3-examples{jme3.v}");
+        if (examples.isSelected()) addCoreDependency("${jme3.g}:jme3-examples${jme3.v}");
     }
 
     @FXML
