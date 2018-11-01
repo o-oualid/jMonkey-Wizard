@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" gridLinesVisible="true" prefWidth="600.0" stylesheets="@/style/style.css"
-          xmlns="http://javafx.com/javafx/8.0.121" fx:controller="com.oualid.jMonkeyWizard.Dependencies">
+          xmlns="http://javafx.com/javafx/8.0.121" fx:controller="com.oualid.jmonkeywizard.Dependencies">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>

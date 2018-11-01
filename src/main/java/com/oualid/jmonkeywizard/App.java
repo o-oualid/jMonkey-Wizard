@@ -1,4 +1,4 @@
-package com.oualid.jMonkeyWizard;
+package com.oualid.jmonkeywizard;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class App extends Application {
-    static Stage dependencies = new Stage();
+    static Stage dependencies;
     static Stage primaryStage;
 
     public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         App.primaryStage = primaryStage;
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("gui/MainUI.fxml"));
             primaryStage.setTitle("jMonkey Wizard");
             primaryStage.setScene(new Scene(parent));
             primaryStage.setResizable(false);
@@ -32,7 +32,8 @@ public class App extends Application {
         primaryStage.show();
         // primaryStage.setAlwaysOnTop(true);
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/gui/Dependencies.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("gui/Dependencies.fxml"));
+            dependencies=new Stage();
             dependencies.setTitle("More Dependencies");
             dependencies.setResizable(false);
             dependencies.initOwner(primaryStage);

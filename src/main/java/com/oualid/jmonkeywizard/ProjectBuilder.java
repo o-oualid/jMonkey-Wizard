@@ -1,4 +1,4 @@
-package com.oualid.jMonkeyWizard;
+package com.oualid.jmonkeywizard;
 
 class ProjectBuilder {
 

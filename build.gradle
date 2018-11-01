@@ -1,4 +1,6 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
 def platform = 'linux'
 
 repositories {
@@ -10,3 +12,24 @@ dependencies {
     implementation "org.openjfx:javafx-controls:11:$platform"
     implementation "org.openjfx:javafx-fxml:11:$platform"
 }
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+                '--module-path', classpath.asPath,
+                '--add-modules', 'javafx.controls',
+                '--add-modules', 'javafx.graphics'
+                
+        ]
+    }
+}
+
+run {
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--add-modules', 'javafx.controls'
+        ]
+    }
+}
+
+mainClassName = "com.oualid.jmonkeywizard.App"

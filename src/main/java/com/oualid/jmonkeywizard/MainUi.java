@@ -1,4 +1,4 @@
-package com.oualid.jMonkeyWizard;
+package com.oualid.jmonkeywizard;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -7,7 +7,7 @@ import javafx.stage.DirectoryChooser;
 import java.io.File;
 import java.util.HashMap;
 
-import static com.oualid.jMonkeyWizard.FileUtils.*;
+import static com.oualid.jmonkeywizard.FileUtils.*;
 
 public class MainUi {
     static HashMap<String, String> specialWords = new HashMap<>();

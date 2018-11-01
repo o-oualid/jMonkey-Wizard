@@ -1,4 +1,4 @@
-package com.oualid.jMonkeyWizard;
+package com.oualid.jmonkeywizard;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
