@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="700.0" stylesheets="@/style/style.css" xmlns="http://javafx.com/javafx/8.0.121"
-      fx:controller="com.oualid.jmonkeywizard.MainUi">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@/style/style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oualid.jmonkeywizard.MainUi">
 
     <Pane prefHeight="89.0" prefWidth="500.0">
         <ImageView fitHeight="154.0" fitWidth="500.0" layoutX="4.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
@@ -28,6 +27,7 @@
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
             <columnConstraints>
@@ -36,11 +36,9 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="137.0" />
             </columnConstraints>
             <children>
-                <TextField fx:id="jmeVersion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                           onAction="#update" prefHeight="33.0" prefWidth="171.0" text="3.2.1"/>
+                <TextField fx:id="jmeVersion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#update" prefHeight="33.0" prefWidth="171.0" text="3.2.1" />
                 <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="155.0" text="Release:" textAlignment="RIGHT" GridPane.columnIndex="1" />
-                <ComboBox fx:id="jmeRelease" editable="true" maxHeight="1.7976931348623157E308"
-                          maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2">
+                <ComboBox fx:id="jmeRelease" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="stable" />
@@ -63,27 +61,17 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="gameDirectory" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                           onAction="#updateDir" onInputMethodTextChanged="#updateDir" onKeyTyped="#updateDir"/>
-                <Button fx:id="browse" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" onAction="#browse" prefHeight="29.0" prefWidth="136.0" text="Browse"
-                        GridPane.columnIndex="1"/>
+                <TextField fx:id="gameDirectory" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#updateDir" onInputMethodTextChanged="#updateDir" onKeyTyped="#updateDir" />
+                <Button fx:id="browse" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#browse" text="Browse" GridPane.columnIndex="1" />
             </children>
         </GridPane>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-               minWidth="-Infinity" text="Game Name:" textAlignment="RIGHT"/>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-               minWidth="-Infinity" text="Game Package:" textAlignment="RIGHT" GridPane.rowIndex="1"/>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-               minWidth="-Infinity" text="Game Directory:" textAlignment="RIGHT" GridPane.rowIndex="2"/>
-        <TextField fx:id="gameName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                   onKeyTyped="#updateGameName" text="My Game" GridPane.columnIndex="1"/>
-        <TextField fx:id="gamePackage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                   onAction="#update" text="com.jmonkey.game" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-               minWidth="-Infinity" text="JME version:" textAlignment="RIGHT" GridPane.rowIndex="3"/>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-               minWidth="-Infinity" text="Java version:" textAlignment="RIGHT" GridPane.rowIndex="4"/>
+        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Game Name:" textAlignment="RIGHT" />
+        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Game Package:" textAlignment="RIGHT" GridPane.rowIndex="1" />
+        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Game Directory:" textAlignment="RIGHT" GridPane.rowIndex="2" />
+        <TextField fx:id="gameName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyTyped="#updateGameName" text="My Game" GridPane.columnIndex="1" />
+        <TextField fx:id="gamePackage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#update" text="com.jmonkey.game" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="JME version:" textAlignment="RIGHT" GridPane.rowIndex="3" />
+        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Java version:" textAlignment="RIGHT" GridPane.rowIndex="4" />
       <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -94,19 +82,28 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <ComboBox fx:id="javaVersion" editable="true" maxHeight="1.7976931348623157E308"
-                       maxWidth="1.7976931348623157E308" prefWidth="150.0">
+             <ComboBox fx:id="javaVersion" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="1.8" />
                         <String fx:value="1.7" />
+                        <String fx:value="1.6" />
                     </FXCollections>
                 </items>
             </ComboBox>
+            <CheckBox fx:id="useKotlin" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Use Kotlin version" GridPane.columnIndex="1" />
+            <ComboBox fx:id="kotlinVersion" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2">
+             <items>
+                 <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="1.3.0" />
+                     <String fx:value="1.2.0" />
+                     <String fx:value="1.0.0" />
+                 </FXCollections>
+             </items>
+            </ComboBox>
          </children>
       </GridPane>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-               minWidth="-Infinity" text="Gradle version:" textAlignment="RIGHT" GridPane.rowIndex="5"/>
+        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Gradle version:" textAlignment="RIGHT" GridPane.rowIndex="5" />
       <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -117,11 +114,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <TextField fx:id="gradleVersion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                        text="4.9"/>
-            <Label alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="197.0" text="Type:" textAlignment="RIGHT" GridPane.columnIndex="1" />
-             <ComboBox fx:id="gradleType" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                       prefWidth="150.0" GridPane.columnIndex="2">
+             <TextField fx:id="gradleVersion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="4.10.2" />
+            <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Type:" textAlignment="RIGHT" GridPane.columnIndex="1" />
+             <ComboBox fx:id="gradleType" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="bin" />
@@ -131,8 +126,7 @@
             </ComboBox>
          </children>
       </GridPane>
-        <CheckBox fx:id="customTmp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                  mnemonicParsing="false" text="my template" GridPane.rowIndex="6"/>
+        <CheckBox fx:id="customTmp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="my template" GridPane.rowIndex="6" />
       <GridPane GridPane.columnIndex="1" GridPane.rowIndex="6">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
@@ -142,16 +136,23 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <Button fx:id="chooseTemplate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                     mnemonicParsing="false" onAction="#chooseTemplate" prefHeight="33.0" prefWidth="221.0" text="Browse"
-                     GridPane.columnIndex="1"/>
-             <TextField fx:id="tmpPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"/>
+             <Button fx:id="chooseTemplate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#chooseTemplate" text="Browse" GridPane.columnIndex="1" />
+             <TextField fx:id="tmpPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
          </children>
       </GridPane>
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="7">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Android build tools version" GridPane.rowIndex="7" />
     </GridPane>
     <Separator prefWidth="200.0" />
-    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sub Projects:"
-           textFill="#0075ff"/>
+    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sub Projects:" textFill="#0075ff" />
     <GridPane>
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -163,19 +164,14 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-            <CheckBox fx:id="desktop" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="Desktop"/>
-            <CheckBox fx:id="vr" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="VR" GridPane.columnIndex="3"/>
-            <CheckBox fx:id="ios" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="IOS" GridPane.columnIndex="2"/>
-            <CheckBox fx:id="android" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="Android"
-                      GridPane.columnIndex="1"/>
+            <CheckBox fx:id="desktop" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="Desktop" />
+            <CheckBox fx:id="vr" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="VR" GridPane.columnIndex="3" />
+            <CheckBox fx:id="ios" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="IOS" GridPane.columnIndex="2" />
+            <CheckBox fx:id="android" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="Android" GridPane.columnIndex="1" />
         </children>
     </GridPane>
     <Separator prefWidth="200.0" />
-    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Dependecies:" textFill="#0075ff"/>
+    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Dependecies:" textFill="#0075ff" />
     <GridPane>
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -190,66 +186,43 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-            <CheckBox fx:id="jogg" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="JOGG" GridPane.columnIndex="3"
-                      GridPane.rowIndex="1"/>
-            <CheckBox fx:id="plugins" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="Plugins" GridPane.rowIndex="1"/>
-            <CheckBox fx:id="jBullet" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#updateJBullet" selected="true" text="JBullet"
-                      GridPane.rowIndex="2"/>
-            <CheckBox fx:id="terrain" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="Terrain" GridPane.columnIndex="1"
-                      GridPane.rowIndex="1"/>
-            <CheckBox fx:id="bullet" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#updateBullet" text="Bullet" GridPane.columnIndex="1"
-                      GridPane.rowIndex="2"/>
-            <CheckBox fx:id="niftyGUI" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="NiftyGUI"
-                      GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-            <CheckBox fx:id="effects" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="Effects" GridPane.columnIndex="2"
-                      GridPane.rowIndex="1"/>
-            <CheckBox fx:id="blender" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" text="Blender" GridPane.columnIndex="3"/>
-            <CheckBox fx:id="examples" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" text="Examples" GridPane.rowIndex="3"/>
-            <CheckBox fx:id="networking" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      mnemonicParsing="false" onAction="#update" selected="true" text="Networking"
-                      GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-            <RadioButton fx:id="lwjgl3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                         mnemonicParsing="false" onAction="#update" selected="true" text="LWJGL3">
+            <CheckBox fx:id="jogg" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="JOGG" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <CheckBox fx:id="plugins" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="Plugins" GridPane.rowIndex="1" />
+            <CheckBox fx:id="jBullet" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateJBullet" selected="true" text="JBullet" GridPane.rowIndex="2" />
+            <CheckBox fx:id="terrain" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="Terrain" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckBox fx:id="bullet" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateBullet" text="Bullet" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <CheckBox fx:id="niftyGUI" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="NiftyGUI" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <CheckBox fx:id="effects" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="Effects" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <CheckBox fx:id="blender" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" text="Blender" GridPane.columnIndex="3" />
+            <CheckBox fx:id="examples" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" text="Examples" GridPane.rowIndex="3" />
+            <CheckBox fx:id="networking" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="Networking" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <RadioButton fx:id="lwjgl3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" selected="true" text="LWJGL3">
                 <toggleGroup>
                     <ToggleGroup fx:id="render" />
                 </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="lwjgl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                         mnemonicParsing="false" onAction="#update" text="LWJGL" toggleGroup="$render"
-                         GridPane.columnIndex="1"/>
-            <RadioButton fx:id="jogl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                         mnemonicParsing="false" onAction="#update" text="JOGL" toggleGroup="$render"
-                         GridPane.columnIndex="2"/>
-        <Button fx:id="more" mnemonicParsing="false" onAction="#more" prefHeight="31.0" prefWidth="161.0" text="More" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <RadioButton fx:id="lwjgl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" text="LWJGL" toggleGroup="$render" GridPane.columnIndex="1" />
+            <RadioButton fx:id="jogl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#update" text="JOGL" toggleGroup="$render" GridPane.columnIndex="2" />
+        <Button fx:id="more" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#more" text="More" GridPane.columnIndex="3" GridPane.rowIndex="3" />
         </children>
     </GridPane>
     <Separator prefWidth="200.0" />
     <GridPane>
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="493.0" minWidth="10.0" prefWidth="408.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="92.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="493.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-            <ProgressBar fx:id="progressBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                         prefHeight="83.0" prefWidth="459.0" progress="0.0"/>
-            <Button fx:id="buildProject" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                    mnemonicParsing="false" onAction="#build" prefHeight="33.0" prefWidth="877.0" text="Build Project"
-                    GridPane.columnIndex="1"/>
+            <ProgressBar fx:id="progressBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" progress="0.0" />
+            <Button fx:id="buildProject" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#build" text="Build Project" GridPane.columnIndex="1" />
         </children>
     </GridPane>
    <Separator prefWidth="200.0" />
-    <TextArea fx:id="messages" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-              minHeight="-Infinity"/>
+    <TextArea fx:id="messages" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" />
+   <padding>
+      <Insets left="5.0" right="5.0" />
+   </padding>
 </VBox>

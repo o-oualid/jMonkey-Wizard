@@ -1,4 +1,9 @@
+plugins {
+    id 'java'
+}
+
 sourceSets.main.resources.srcDirs(["../assets"])
+
 dependencies{
     ${coreDependencies}
 }

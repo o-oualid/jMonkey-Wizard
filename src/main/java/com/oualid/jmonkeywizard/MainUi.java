@@ -17,11 +17,11 @@ public class MainUi {
     @FXML
     private TextField gameName, gameDirectory, jmeVersion, gradleVersion;
     @FXML
-    private ComboBox jmeRelease, javaVersion, gradleType;
+    private ComboBox jmeRelease, javaVersion, gradleType,kotlinVersion;
     @FXML
     private RadioButton jogl, lwjgl, lwjgl3;
     @FXML
-    private CheckBox desktop, android, ios, vr, jBullet, bullet, jogg, plugins,
+    private CheckBox desktop, android, ios, vr, useKotlin,jBullet, bullet, jogg, plugins,
             terrain, effects, blender, niftyGUI, examples, networking, customTmp;
     @FXML
     private Button buildProject;
@@ -50,7 +50,8 @@ public class MainUi {
         projectDir = new File(projectDir.getAbsolutePath());
         jmeRelease.getSelectionModel().select(0);
         javaVersion.getSelectionModel().select(0);
-        gradleType.getSelectionModel().select(0);
+        gradleType.getSelectionModel().select(1);
+        kotlinVersion.getSelectionModel().select(0);
         update();
     }
 
@@ -93,7 +94,7 @@ public class MainUi {
         specialWords.put("iosDependencies", iosDependencies.toString());
         specialWords.put("vrDependencies", vrDependencies.toString());
         if (android.isSelected()) {
-            addClasspath("com.android.tools.build:gradle:3.0.1");
+            addClasspath("com.android.tools.build:gradle:3.2.1");
             addRepository("google()");
         }
         specialWords.put("classPaths", classPaths.toString());
@@ -115,7 +116,7 @@ public class MainUi {
 
         progressBar.setProgress(80);
         createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
-        createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
+        createFileFromContent(projectDir, "settings.gradle", "include 'core'," + modules);
         progressBar.setProgress(100);
         printMessage("Build end");
         progressBar.setProgress(0);
@@ -205,7 +206,7 @@ public class MainUi {
         newDir(assetsDir.getPath() + "/Sounds");
         newDir(assetsDir.getPath() + "/Textures");
 
-        File coreDir = newDir(projectDir.getPath() + "/core"); //core folder
+        File coreDir = newDir(projectDir.getPath() + "/core");
         File javaDir = newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));// core java folder
 
         createFileFromTmp(javaDir, "App.java", "template/core/Main.java");
@@ -308,7 +309,7 @@ public class MainUi {
         }
 
         if (android.isSelected()) {
-            addAndroidDependency("com.android.support:appcompat-v7:27.1.0");
+            addAndroidDependency("com.android.support:appcompat-v7:28.0.0");
             addAndroidDependency("${jme3.g}:jme3-android:${jme3.v}");
             addAndroidDependency("${jme3.g}:jme3-android-native:${jme3.v}");
         }
@@ -318,27 +319,27 @@ public class MainUi {
         if (vr.isSelected()) addVrDependency("${jme3.g}:jme3-vr:${jme3.v}");
 
         if (bullet.isSelected()) {
-            addCoreDependency("${jme3.g}:jme3-bullet{jme3.v}");
+            addCoreDependency("${jme3.g}:jme3-bullet:${jme3.v}");
             addDesktopDependency("${jme3.g}:jme3-bullet-native:${jme3.v}");
             addAndroidDependency("${jme3.g}:jme3-bullet-native-android:${jme3.v}");
         } else if (jBullet.isSelected())
             addCoreDependency("${jme3.g}:jme3-jbullet:${jme3.v}");
 
-        if (terrain.isSelected()) addCoreDependency("${jme3.g}:jme3-terrain${jme3.v}");
+        if (terrain.isSelected()) addCoreDependency("${jme3.g}:jme3-terrain:${jme3.v}");
 
-        if (niftyGUI.isSelected()) addCoreDependency("${jme3.g}:jme3-niftygui${jme3.v}");
+        if (niftyGUI.isSelected()) addCoreDependency("${jme3.g}:jme3-niftygui:${jme3.v}");
 
-        if (effects.isSelected()) addCoreDependency("${jme3.g}:jme3-effects${jme3.v}");
+        if (effects.isSelected()) addCoreDependency("${jme3.g}:jme3-effects:${jme3.v}");
 
-        if (plugins.isSelected()) addCoreDependency("${jme3.g}:jme3-plugins${jme3.v}");
+        if (plugins.isSelected()) addCoreDependency("${jme3.g}:jme3-plugins:${jme3.v}");
 
-        if (blender.isSelected()) addDesktopDependency("${jme3.g}:jme3-blender${jme3.v}");
+        if (blender.isSelected()) addDesktopDependency("${jme3.g}:jme3-blender:${jme3.v}");
 
-        if (jogg.isSelected()) addCoreDependency("${jme3.g}:jme3-jogg${jme3.v}");
+        if (jogg.isSelected()) addCoreDependency("${jme3.g}:jme3-jogg:${jme3.v}");
 
-        if (networking.isSelected()) addCoreDependency("${jme3.g}:jme3-networking${jme3.v}");
+        if (networking.isSelected()) addCoreDependency("${jme3.g}:jme3-networking:${jme3.v}");
 
-        if (examples.isSelected()) addCoreDependency("${jme3.g}:jme3-examples${jme3.v}");
+        if (examples.isSelected()) addCoreDependency("${jme3.g}:jme3-examples:${jme3.v}");
     }
 
     @FXML

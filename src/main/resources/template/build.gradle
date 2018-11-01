@@ -13,11 +13,10 @@ buildscript {
 }
 
 subprojects {
-    apply plugin: "idea"
-    apply plugin: "java"
     repositories {
         mavenLocal()
         jcenter()
         mavenCentral()
+        maven { url "https://dl.bintray.com/jmonkeyengine/org.jmonkeyengine" }
     }
 }
