@@ -10,6 +10,7 @@ import java.util.HashMap;
 import static com.oualid.jmonkeywizard.FileUtils.*;
 
 public class MainUi {
+    private final String slash = File.separator;
     static HashMap<String, String> specialWords = new HashMap<>();
     @FXML
     TextField gamePackage;
@@ -112,6 +113,7 @@ public class MainUi {
         createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
         progressBar.setProgress(100);
         printMessage("Build end");
+        progressBar.setProgress(0);
     }
 
 
@@ -124,7 +126,10 @@ public class MainUi {
         else buildProject.setDisable(false);
 
         if (gamePackage.getText().isEmpty()) buildProject.setDisable(true);
-        else buildProject.setDisable(false);
+        else {
+            gamePackage.setText(gamePackage.getText().toLowerCase());
+            buildProject.setDisable(false);
+        }
 
         if (gameDirectory.getText().isEmpty()) buildProject.setDisable(true);
         else buildProject.setDisable(false);
@@ -333,12 +338,12 @@ public class MainUi {
     @FXML
     private void updateGameName() {
         if (!gameName.getText().isEmpty()) {
-            gameDirectory.setText(projectDir.getParent() + "\\" + gameName.getText());
+            gameDirectory.setText(projectDir.getParent() + slash + gameName.getText());
             projectDir = new File(gameDirectory.getText());
             gameDirectory.setText(
-                    projectDir.getParentFile().getAbsolutePath() + "\\" +
+                    projectDir.getParentFile().getAbsolutePath() + slash +
                             gameName.getText()
-                                    .replace("\\", "")
+                                    .replace(slash, "")
                                     .replace("/", ""));
             projectDir = new File(gameDirectory.getText());
             String[] packages = (gamePackage.getText()).split("\\.");
@@ -350,7 +355,7 @@ public class MainUi {
                 if (p.length() > 0) p.append(".");
                 p.append(string);
             }
-            gamePackage.setText(p.toString());
+            gamePackage.setText(p.toString().toLowerCase());
         }
     }
 
@@ -360,7 +365,7 @@ public class MainUi {
         directoryChooser.setInitialDirectory(projectDir.getParentFile());
         File selectedFile = directoryChooser.showDialog(App.primaryStage);
         if (selectedFile != null) {
-            gameDirectory.setText(selectedFile.getAbsolutePath() + "\\" + gameName.getText());
+            gameDirectory.setText(selectedFile.getAbsolutePath() + slash + gameName.getText());
             updateDir();
         }
     }
