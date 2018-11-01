@@ -310,7 +310,7 @@ public class MainUi {
         if (android.isSelected()) {
             addAndroidDependency("com.android.support:appcompat-v7:27.1.0");
             addAndroidDependency("${jme3.g}:jme3-android:${jme3.v}");
-            addAndroidDependency("${jme3.g}:jme3-ios:${jme3.v}");
+            addAndroidDependency("${jme3.g}:jme3-android-native:${jme3.v}");
         }
 
         if (ios.isSelected()) addIosDependency("${jme3.g}:jme3-ios:${jme3.v}");
