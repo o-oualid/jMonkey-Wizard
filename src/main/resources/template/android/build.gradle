@@ -1,5 +1,3 @@
-package template.android
-
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
@@ -22,5 +20,7 @@ android {
     }
 }
 
-dependencies {
+dependencies{
+    implementation project(":core")
+    ${androidDependencies}
 }

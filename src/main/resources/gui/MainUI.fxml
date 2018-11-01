@@ -142,8 +142,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <Button fx:id="browseTmp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                     mnemonicParsing="false" onAction="#browseTmp" prefHeight="33.0" prefWidth="221.0" text="Browse"
+             <Button fx:id="chooseTemplate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                     mnemonicParsing="false" onAction="#chooseTemplate" prefHeight="33.0" prefWidth="221.0" text="Browse"
                      GridPane.columnIndex="1"/>
              <TextField fx:id="tmpPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"/>
          </children>

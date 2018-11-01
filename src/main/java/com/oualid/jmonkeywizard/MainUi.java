@@ -32,7 +32,12 @@ public class MainUi {
     private TextField tmpPath;
 
     private String modules;
-    private String coreDependencies, desktopDependencies = "", androidDependencies = "", iosDependencies = "", vrDependencies = "";
+    private StringBuilder coreDependencies = new StringBuilder();
+    private StringBuilder desktopDependencies = new StringBuilder();
+    private StringBuilder androidDependencies = new StringBuilder();
+    private StringBuilder iosDependencies = new StringBuilder();
+    private StringBuilder vrDependencies = new StringBuilder();
+    private StringBuilder classPaths = new StringBuilder();
     private File projectDir;
 
 
@@ -75,36 +80,37 @@ public class MainUi {
             newDir(gameDirectory.getText());
             copyDirectory(tmpPath.getText(), gameDirectory.getText(), gamePackage.getText());
             printMessage("Build End");
-            progressBar.setProgress(100);
+            progressBar.setProgress(0);
             return;
         }
-        addCore();
 
         addDependencies();
-        specialWords.put("coreDependencies", coreDependencies);
-        progressBar.setProgress(20);
+        specialWords.put("coreDependencies", coreDependencies.toString());
+        specialWords.put("desktopDependencies", desktopDependencies.toString());
+        specialWords.put("androidDependencies", androidDependencies.toString());
+        specialWords.put("iosDependencies", iosDependencies.toString());
+        specialWords.put("vrDependencies", vrDependencies.toString());
+        addClasspath("com.android.tools.build:gradle:3.0.1");
+        specialWords.put("classPaths", classPaths.toString());
+
+        addCore();
+        progressBar.setProgress(10);
         if (desktop.isSelected()) addDesktop();
-        else specialWords.put("desktopDependencies", "");
 
 
-        progressBar.setProgress(30);
+        progressBar.setProgress(20);
         if (android.isSelected()) addAndroid();
-        else {
-            specialWords.put("androidDependencies", "");
-            specialWords.put("androidClasspath", "");
-        }
+
         progressBar.setProgress(40);
         if (ios.isSelected()) addIos();
-        else specialWords.put("iosDependencies", "");
-
-        progressBar.setProgress(50);
-        if (vr.isSelected()) addVr();
-        else specialWords.put("vrDependencies", "");
 
         progressBar.setProgress(60);
+        if (vr.isSelected()) addVr();
+
+        progressBar.setProgress(80);
         createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
         createFileFromContent(projectDir, "settings.gradle", "include 'core','assets'" + modules);
-        progressBar.setProgress(80);
+        progressBar.setProgress(100);
         printMessage("Build end");
     }
 
@@ -175,7 +181,6 @@ public class MainUi {
      */
 
     private void addCore() {
-
         projectDir = newDir(projectDir.getPath());
         File gradleDir = newDir(projectDir.getPath() + "/gradle/wrapper");
         File assetsDir = newDir(projectDir.getPath() + "/assets");
@@ -196,8 +201,6 @@ public class MainUi {
         createFileFromTmp(javaDir, "App.java", "template/core/Main.java");
         createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
 
-        // add jme3 core dependency to Core module
-        coreDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-core:$JMonkey_version\"\n";
         // make gradle wrapper files
         createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
         copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
@@ -215,23 +218,6 @@ public class MainUi {
         File desktopJavaDir = newDir(desktopDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
         createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
         createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle");
-        //add desktop necessary dependencies
-        if (lwjgl3.isSelected())
-            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl3:$JMonkey_version\"\n";
-        else if (lwjgl.isSelected())
-            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-lwjgl:$JMonkey_version\"\n";
-        else if (jogl.isSelected())
-            desktopDependencies = "\t\t\tcompile \"org.jmonkeyengine:jme3-jogl:$JMonkey_version\"\n";
-
-        desktopDependencies = "project(\":desktop\") {\n" + "\t\tapply plugin: \"java\"\n" +
-                "\t\tapply plugin: \"idea\"\n" + "\t\tidea {\n" + "\t\t\tmodule {\n" +
-                "\t\t\t\tscopes.PROVIDED.minus += [configurations.compile]\n" +
-                "\t\t\t\tscopes.COMPILE.plus += [configurations.compile]\n" +
-                "        }\n" + "    }\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile \"org.junit.platform:junit-platform-launcher:$junitPlatform_version\"\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-desktop:$JMonkey_version\"\n" + desktopDependencies + "\n\t}\n}";
-
-        specialWords.put("desktopDependencies", desktopDependencies);
         modules = modules + ", 'desktop'";
     }
 
@@ -268,17 +254,6 @@ public class MainUi {
         copyFile("template/android/res/mipmap-mdpi/ic_launcher_round.png", xxxhdpi.getPath() + "/ic_launcher_round.png");
         copyFile("template/android/res/mipmap-mdpi/ic_launcher.png", xxxhdpi.getPath() + "/ic_launcher.png");
 
-        androidDependencies = "project(\":android\")" +
-                " {\n" + "\t\tapply plugin: \"android\"\n" +
-                "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile fileTree(dir: 'libs', include: ['*.jar'])\n" +
-                "\t\t\ttestCompile 'junit:junit:4.12'\n" +
-                "\t\t\tcompile 'com.android.support:appcompat-v7:27.1.0'\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-android:$JMonkey_version\"\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-android-native:$JMonkey_version\"\n" +
-                androidDependencies + "\n\t}\n}";
-        specialWords.put("androidDependencies", androidDependencies);
-        specialWords.put("androidClasspath", "classpath 'com.android.tools.build:gradle:3.0.1'");
         modules = modules + ", 'android'";
     }
 
@@ -290,12 +265,7 @@ public class MainUi {
         File iosJavaDir = newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
         createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
         createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle");
-        // add ios necessary dependencies
-        iosDependencies = "project(\":ios\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-ios:$JMonkey_version\"\n" + iosDependencies + "\n\t}\n}";
-        specialWords.put("iosDependencies", iosDependencies);
         modules = modules + ", 'ios'";
-
     }
 
     /**
@@ -307,10 +277,7 @@ public class MainUi {
         File vrJavaDir = newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
         createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
         createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle");
-        //add vr necessary dependencies
-        vrDependencies = "project(\":vr\") {\n" + "\t\tapply plugin: \"java\"\n" + "\t\tdependencies {\n" + "\t\t\tcompile project(\":core\")\n" +
-                "\t\t\tcompile \"org.jmonkeyengine:jme3-vr:$JMonkey_version\"\n" + vrDependencies + "\n\t}\n}";
-        specialWords.put("vrDependencies", vrDependencies);
+
         modules = modules + ", 'vr'";
     }
 
@@ -319,41 +286,50 @@ public class MainUi {
      */
 
     private void addDependencies() {
+        addCoreDependency("${jme3.g}:jme3-core:${jme3.v}");
+
+        if (desktop.isSelected()) {
+            addDesktopDependency("${jme3.g}:jme3-desktop:${jme3.v}");
+
+            if (lwjgl3.isSelected()) addDesktopDependency("${jme3.g}:jme3-lwjgl3:${jme3.v}");
+
+            else if (lwjgl.isSelected()) addDesktopDependency("${jme3.g}:jme3-lwjgl:${jme3.v}");
+            else if (jogl.isSelected()) addDesktopDependency("${jme3.g}:jme3-jogl:${jme3.v}");
+        }
+
+        if (android.isSelected()) {
+            addAndroidDependency("com.android.support:appcompat-v7:27.1.0");
+            addAndroidDependency("${jme3.g}:jme3-android:${jme3.v}");
+            addAndroidDependency("${jme3.g}:jme3-ios:${jme3.v}");
+        }
+
+        if (ios.isSelected()) addIosDependency("${jme3.g}:jme3-ios:${jme3.v}");
+
+        if (vr.isSelected()) addVrDependency("${jme3.g}:jme3-vr:${jme3.v}");
+
         if (bullet.isSelected()) {
-            desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native:$JMonkey_version\"\n";
-            androidDependencies = androidDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet-native-android:$JMonkey_version\"\n";
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-bullet:$JMonkey_version\"\n";
-        } else if (jBullet.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jbullet:$JMonkey_version\"\n";
+            addCoreDependency("${jme3.g}:jme3-bullet{jme3.v}");
+            addDesktopDependency("${jme3.g}:jme3-bullet-native:${jme3.v}");
+            addAndroidDependency("${jme3.g}:jme3-bullet-native-android:${jme3.v}");
+        } else if (jBullet.isSelected()) addCoreDependency("${jme3.g}:jme3-jbullet:${jme3.v}");
 
-        if (terrain.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-terrain:$JMonkey_version\"\n";
+        if (terrain.isSelected()) addCoreDependency("${jme3.g}:jme3-terrain{jme3.v}");
 
-        if (niftyGUI.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-niftygui:$JMonkey_version\"\n";
+        if (niftyGUI.isSelected()) addCoreDependency("${jme3.g}:jme3-niftygui{jme3.v}");
 
-        if (effects.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-effects:$JMonkey_version\"\n";
+        if (effects.isSelected()) addCoreDependency("${jme3.g}:jme3-effects{jme3.v}");
 
-        if (plugins.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-plugins:$JMonkey_version\"\n";
+        if (plugins.isSelected()) addCoreDependency("${jme3.g}:jme3-plugins{jme3.v}");
 
-        if (blender.isSelected())
-            desktopDependencies = desktopDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-blender:$JMonkey_version\"\n";
+        if (blender.isSelected()) addDesktopDependency("${jme3.g}:jme3-blender{jme3.v}");
 
-        if (jogg.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-jogg:$JMonkey_version\"\n";
+        if (jogg.isSelected()) addCoreDependency("${jme3.g}:jme3-jogg{jme3.v}");
 
-        if (networking.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-networking:$JMonkey_version\"\n";
+        if (networking.isSelected()) addCoreDependency("${jme3.g}:jme3-networking{jme3.v}");
 
-        if (examples.isSelected())
-            coreDependencies = coreDependencies + "\t\t\tcompile \"org.jmonkeyengine:jme3-examples:$JMonkey_version\"\n";
+        if (examples.isSelected()) addCoreDependency("${jme3.g}:jme3-examples{jme3.v}");
     }
 
-    /**
-     * called by {@link MainUi#gameName} when modified
-     */
     @FXML
     private void updateGameName() {
         if (!gameName.getText().isEmpty()) {
@@ -378,9 +354,6 @@ public class MainUi {
         }
     }
 
-    /**
-     * called by {#browse} when tapped
-     */
     @FXML
     private void browse() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -392,11 +365,8 @@ public class MainUi {
         }
     }
 
-    /**
-     * called by {#browseTmp} when tapped
-     */
     @FXML
-    private void browseTmp() {
+    private void chooseTemplate() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(projectDir.getParentFile());
         File selectedFile = directoryChooser.showDialog(App.primaryStage);
@@ -412,9 +382,7 @@ public class MainUi {
         projectDir = new File(projectDir.getAbsolutePath());
     }
 
-    /**
-     * called by {#more} when tapped
-     */
+
     @FXML
     private void more() {
         App.dependencies.show();
@@ -423,5 +391,47 @@ public class MainUi {
     private void printMessage(String text) {
         if (messages.getText().isEmpty()) messages.setText(text);
         else messages.setText(messages.getText() + "\n" + text);
+    }
+
+    private void addAndroidDependency(String dependency) {
+        androidDependencies
+                .append("implementation \"")
+                .append(dependency)
+                .append("\"\n    ");
+    }
+
+    private void addDesktopDependency(String dependency) {
+        desktopDependencies
+                .append("implementation \"")
+                .append(dependency)
+                .append("\"\n    ");
+    }
+
+    private void addIosDependency(String dependency) {
+        iosDependencies
+                .append("implementation \"")
+                .append(dependency)
+                .append("\"\n    ");
+    }
+
+    private void addVrDependency(String dependency) {
+        vrDependencies
+                .append("implementation \"")
+                .append(dependency)
+                .append("\"\n    ");
+    }
+
+    private void addCoreDependency(String dependency) {
+        coreDependencies
+                .append("implementation \"")
+                .append(dependency)
+                .append("\"\n    ");
+    }
+
+    private void addClasspath(String classpath) {
+        classPaths
+                .append("classpath \"")
+                .append(classpath)
+                .append("\"\n        ");
     }
 }

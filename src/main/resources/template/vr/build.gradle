@@ -1,5 +1,4 @@
-package template.vr
-
-apply plugin: 'java'
-sourceCompatibility = ${javaVersion}
-sourceSets.main.java.srcDirs = [ "src/main/java" ]
+dependencies {
+    implementation project(":core")
+    ${vrDependencies}
+}

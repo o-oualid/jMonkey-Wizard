@@ -99,12 +99,6 @@ class FileUtils {
         }
     }
 
-    /**
-     * this method create new directory then return it.
-     *
-     * @param directory the directory path in String
-     * @return file type File
-     */
 
     static File newDir(String directory) {
         File file = new File(directory);

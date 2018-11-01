@@ -28,12 +28,12 @@ public class App extends Application {
             e.printStackTrace();
         }
 
-        // primaryStage.getIcons().add(new Image("/icons/icon.png"));
+        //primaryStage.getIcons().add(new Image("/icons/icon.png"));
         primaryStage.show();
         // primaryStage.setAlwaysOnTop(true);
         try {
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("gui/Dependencies.fxml"));
-            dependencies=new Stage();
+            dependencies = new Stage();
             dependencies.setTitle("More Dependencies");
             dependencies.setResizable(false);
             dependencies.initOwner(primaryStage);
@@ -43,6 +43,4 @@ public class App extends Application {
             e.printStackTrace();
         }
     }
-
-
 }

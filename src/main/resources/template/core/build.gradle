@@ -1,6 +1,4 @@
-package template.core
-
-apply plugin: "java"
-sourceCompatibility = ${javaVersion}
-sourceSets.main.java.srcDirs = ["src/main/java"]
-sourceSets.main.resources.srcDirs(["../assets"]) 
+sourceSets.main.resources.srcDirs(["../assets"])
+dependencies{
+    ${coreDependencies}
+}

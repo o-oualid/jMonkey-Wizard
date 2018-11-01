@@ -1,24 +1,36 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-def platform = 'linux'
-
 repositories {
     mavenCentral()
 }
 dependencies {
-    implementation "org.openjfx:javafx-base:11:$platform"
-    implementation "org.openjfx:javafx-graphics:11:$platform"
-    implementation "org.openjfx:javafx-controls:11:$platform"
-    implementation "org.openjfx:javafx-fxml:11:$platform"
+    implementation "org.openjfx:javafx-base:11:linux"
+    implementation "org.openjfx:javafx-graphics:11:linux"
+    implementation "org.openjfx:javafx-controls:11:linux"
+    implementation "org.openjfx:javafx-fxml:11:linux"
+
+    implementation "org.openjfx:javafx-base:11:win"
+    implementation "org.openjfx:javafx-graphics:11:win"
+    implementation "org.openjfx:javafx-controls:11:win"
+    implementation "org.openjfx:javafx-fxml:11:win"
+
+    implementation "org.openjfx:javafx-base:11:mac"
+    implementation "org.openjfx:javafx-graphics:11:mac"
+    implementation "org.openjfx:javafx-controls:11:mac"
+    implementation "org.openjfx:javafx-fxml:11:mac"
 }
 compileJava {
     doFirst {
         options.compilerArgs = [
                 '--module-path', classpath.asPath,
                 '--add-modules', 'javafx.controls',
-                '--add-modules', 'javafx.graphics'
-                
+                '--add-modules', 'javafx.graphics',
+                '--add-exports', 'javafx.graphics/com.sun.javafx.util=ALL-UNNAMED',
+                '--add-exports', 'javafx.base/com.sun.javafx.reflect=ALL-UNNAMED',
+                '--add-exports', 'javafx.base/com.sun.javafx.beans=ALL-UNNAMED',
+                '--add-exports', 'javafx.graphics/com.sun.glass.utils=ALL-UNNAMED',
+                '--add-exports', 'javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED'
         ]
     }
 }
@@ -27,7 +39,13 @@ run {
     doFirst {
         jvmArgs = [
                 '--module-path', classpath.asPath,
-                '--add-modules', 'javafx.controls'
+                '--add-modules', 'javafx.controls',
+                '--add-modules', 'javafx.graphics',
+                '--add-exports', 'javafx.graphics/com.sun.javafx.util=ALL-UNNAMED',
+                '--add-exports', 'javafx.base/com.sun.javafx.reflect=ALL-UNNAMED',
+                '--add-exports', 'javafx.base/com.sun.javafx.beans=ALL-UNNAMED',
+                '--add-exports', 'javafx.graphics/com.sun.glass.utils=ALL-UNNAMED',
+                '--add-exports', 'javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED'
         ]
     }
 }
