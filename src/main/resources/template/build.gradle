@@ -5,7 +5,7 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
-
+        ${repositories}
     }
     dependencies {
         ${classPaths}
@@ -16,6 +16,7 @@ subprojects {
     apply plugin: "idea"
     apply plugin: "java"
     repositories {
+        mavenLocal()
         jcenter()
         mavenCentral()
     }

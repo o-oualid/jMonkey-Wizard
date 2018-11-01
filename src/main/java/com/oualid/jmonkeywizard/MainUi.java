@@ -39,6 +39,7 @@ public class MainUi {
     private StringBuilder iosDependencies = new StringBuilder();
     private StringBuilder vrDependencies = new StringBuilder();
     private StringBuilder classPaths = new StringBuilder();
+    private StringBuilder repositories = new StringBuilder();
     private File projectDir;
 
 
@@ -91,8 +92,12 @@ public class MainUi {
         specialWords.put("androidDependencies", androidDependencies.toString());
         specialWords.put("iosDependencies", iosDependencies.toString());
         specialWords.put("vrDependencies", vrDependencies.toString());
-        addClasspath("com.android.tools.build:gradle:3.0.1");
+        if (android.isSelected()) {
+            addClasspath("com.android.tools.build:gradle:3.0.1");
+            addRepository("google()");
+        }
         specialWords.put("classPaths", classPaths.toString());
+        specialWords.put("repositories", repositories.toString());
 
         addCore();
         progressBar.setProgress(10);
@@ -316,7 +321,8 @@ public class MainUi {
             addCoreDependency("${jme3.g}:jme3-bullet{jme3.v}");
             addDesktopDependency("${jme3.g}:jme3-bullet-native:${jme3.v}");
             addAndroidDependency("${jme3.g}:jme3-bullet-native-android:${jme3.v}");
-        } else if (jBullet.isSelected()) addCoreDependency("${jme3.g}:jme3-jbullet:${jme3.v}");
+        } else if (jBullet.isSelected())
+            addCoreDependency("${jme3.g}:jme3-jbullet:${jme3.v}");
 
         if (terrain.isSelected()) addCoreDependency("${jme3.g}:jme3-terrain{jme3.v}");
 
@@ -438,5 +444,11 @@ public class MainUi {
                 .append("classpath \"")
                 .append(classpath)
                 .append("\"\n        ");
+    }
+
+    private void addRepository(String repository) {
+        repositories
+                .append(repository)
+                .append("\n        ");
     }
 }
