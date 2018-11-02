@@ -462,7 +462,8 @@ public class MainUi {
 
     @FXML
     private void more() {
-        App.dependencies.show();
+        //TODO:App.dependencies.show();
+        printMessage("not implemented yet");
     }
 
     private void printMessage(String text) {

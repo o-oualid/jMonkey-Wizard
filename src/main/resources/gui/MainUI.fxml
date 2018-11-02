@@ -27,7 +27,6 @@
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
             <columnConstraints>
@@ -140,16 +139,6 @@
              <TextField fx:id="tmpPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
          </children>
       </GridPane>
-      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="7">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
-      <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Android build tools version" GridPane.rowIndex="7" />
     </GridPane>
     <Separator prefWidth="200.0" />
     <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sub Projects:" textFill="#0075ff" />
