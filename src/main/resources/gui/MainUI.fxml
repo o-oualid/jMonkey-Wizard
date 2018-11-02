@@ -212,6 +212,6 @@
    <Separator prefWidth="200.0" />
     <TextArea fx:id="messages" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" />
    <padding>
-      <Insets left="5.0" right="5.0" />
+      <Insets bottom="5.0" left="5.0" right="5.0" />
    </padding>
 </VBox>

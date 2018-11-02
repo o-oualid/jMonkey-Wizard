@@ -20,8 +20,8 @@ class FileUtils {
             String line;
             while ((line = reader.readLine()) != null) out.append(line).append("\n");
 
-            for (String key : MainUi.specialWords.keySet())
-                out = new StringBuilder(out.toString().replace("${" + key + "}", MainUi.specialWords.get(key)));
+            for (String key : ProjectBuilder.specialWords.keySet())
+                out = new StringBuilder(out.toString().replace("${" + key + "}", ProjectBuilder.specialWords.get(key)));
 
             createFileFromContent(path, name, out.toString());
 
