@@ -42,6 +42,8 @@ public class MainUi {
     private StringBuilder androidPlugins;
     private StringBuilder iosPlugins;
     private StringBuilder vrPlugins;
+    private StringBuilder extVars;
+    private StringBuilder subRepositories;
 
     private File projectDir;
 
@@ -64,6 +66,8 @@ public class MainUi {
 
     @FXML
     private void build() {
+        extVars = new StringBuilder();
+        subRepositories = new StringBuilder();
         corePlugins = new StringBuilder();
         repositories = new StringBuilder();
         vrDependencies = new StringBuilder();
@@ -114,6 +118,7 @@ public class MainUi {
             addVrPlugin("kotlin");
             addAndroidPlugin("kotlin-android");
             addClasspath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version");
+            addExtVar("kotlin_version = '" + kotlinVersion.getValue() + "'");
         }
         addDependencies();
         specialWords.put("coreDependencies", coreDependencies.toString());
@@ -124,6 +129,7 @@ public class MainUi {
         if (android.isSelected()) {
             addClasspath("com.android.tools.build:gradle:3.2.1");
             addRepository("google()");
+            addSubRepository("google()");
         }
         specialWords.put("classPaths", classPaths.toString());
         specialWords.put("repositories", repositories.toString());
@@ -134,6 +140,9 @@ public class MainUi {
         specialWords.put("androidPlugins", androidPlugins.toString());
         specialWords.put("iosPlugins", iosPlugins.toString());
         specialWords.put("vrPlugins", vrPlugins.toString());
+
+        specialWords.put("extVars", extVars.toString());
+        specialWords.put("subRepositories", subRepositories.toString());
 
         addCore();
         progressBar.setProgress(10);
@@ -241,14 +250,19 @@ public class MainUi {
         newDir(assetsDir.getPath() + "/Textures");
 
         File coreDir = newDir(projectDir.getPath() + "/core");
+
+        createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
         File javaDir = newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
 
-        createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
-        createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
+        if (useKotlin.isSelected()) {
+            File kotlinDir = newDir(coreDir.getPath() + "/src/main/kotlin/" + gamePackage.getText().replace(".", "/"));
+            createFileFromTmp(kotlinDir, "Main.kt", "template/core/Main.kt");
+        } else
+            createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
+
 
         createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
         copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
-        progressBar.setProgress(30);
 
     }
 
@@ -258,9 +272,13 @@ public class MainUi {
 
     private void addDesktop() {
         File desktopDir = newDir(projectDir.getPath() + "/desktop");
+        File javaDir = newDir(desktopDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
+        if (useKotlin.isSelected()) {
+            File kotlinDir = newDir(desktopDir.getPath() + "/src/main/kotlin/" + gamePackage.getText().replace(".", "/"));
+            createFileFromTmp(kotlinDir, "DesktopLauncher.kt", "template/desktop/DesktopLauncher.kt");
+        } else
+            createFileFromTmp(javaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
 
-        File desktopJavaDir = newDir(desktopDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        createFileFromTmp(desktopJavaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
         createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle");
         modules = modules + ", 'desktop'";
     }
@@ -271,7 +289,7 @@ public class MainUi {
     private void addAndroid() {
         File androidDir = newDir(projectDir.getPath() + "/android");
         File androidMainDir = newDir(androidDir.getPath() + "/src/main");
-        File androidJavaDir = newDir(androidMainDir.getPath() + "/java/" + gamePackage.getText().replace(".", "/"));
+        File javaDir = newDir(androidMainDir.getPath() + "/java/" + gamePackage.getText().replace(".", "/"));
         File androidRes = newDir(androidMainDir + "/res");
         File hdpi = newDir(androidRes.getPath() + "/mipmap-hdpi");
         File mdpi = newDir(androidRes.getPath() + "/mipmap-mdpi");
@@ -280,10 +298,16 @@ public class MainUi {
         File xxxhdpi = newDir(androidRes.getPath() + "/mipmap-xxxhdpi");
         File androidValues = newDir(androidRes.getPath() + "/values");
 
+        if (useKotlin.isSelected()) {
+            File kotlinDir = newDir(androidMainDir.getPath() + "/kotlin/" + gamePackage.getText().replace(".", "/"));
+            createFileFromTmp(kotlinDir, "AndroidLauncher.kt", "template/android/AndroidLauncher.kt");
+
+        } else
+            createFileFromTmp(javaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
+
         createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
         createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml");
         createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml");
-        createFileFromTmp(androidJavaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
         createFileFromTmp(androidDir, "build.gradle", "template/android/build.gradle");
         createFileFromTmp(androidDir, "proguard-rules.pro", "template/android/proguard-rules.pro");
         createFileFromTmp(androidMainDir, "AndroidManifest.xml", "template/android/AndroidManifest.xml");
@@ -306,8 +330,12 @@ public class MainUi {
      */
     private void addIos() {
         File iosDir = newDir(projectDir.getPath() + "/ios");
-        File iosJavaDir = newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        createFileFromTmp(iosJavaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
+        File javaDir = newDir(iosDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
+        if (useKotlin.isSelected()) {
+            File kotlinDir = newDir(iosDir.getPath() + "/src/main/kotlin/" + gamePackage.getText().replace(".", "/"));
+            createFileFromTmp(kotlinDir, "IosLauncher.kt", "template/ios/IosLauncher.kt");
+        } else
+            createFileFromTmp(javaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
         createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle");
         modules = modules + ", 'ios'";
     }
@@ -318,8 +346,12 @@ public class MainUi {
 
     private void addVr() {
         File vrDir = newDir(projectDir.getPath() + "/vr");
-        File vrJavaDir = newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
-        createFileFromTmp(vrJavaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
+        File javaDir = newDir(vrDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
+
+        if (useKotlin.isSelected()) {
+            File kotlinDir = newDir(vrDir.getPath() + "/src/main/kotlin/" + gamePackage.getText().replace(".", "/"));
+            createFileFromTmp(kotlinDir, "VrLauncher.kt", "template/vr/VrLauncher.kt");
+        } else createFileFromTmp(javaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
         createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle");
 
         modules = modules + ", 'vr'";
@@ -490,21 +522,21 @@ public class MainUi {
         corePlugins
                 .append("id \"")
                 .append(plugin)
-                .append("\"    ");
+                .append("\"\n    ");
     }
 
     private void addDesktopPlugin(String plugin) {
         desktopPlugins
                 .append("id \"")
                 .append(plugin)
-                .append("\"    ");
+                .append("\"\n    ");
     }
 
     private void addAndroidPlugin(String plugin) {
         androidPlugins
                 .append("id \"")
                 .append(plugin)
-                .append("\"    ");
+                .append("\"\n    ");
     }
 
     private void addIosPlugin(String plugin) {
@@ -518,6 +550,20 @@ public class MainUi {
         vrPlugins
                 .append("id \"")
                 .append(plugin)
-                .append("\"    ");
+                .append("\"\n    ");
     }
+
+    private void addExtVar(String var) {
+        extVars
+                .append(var)
+                .append("\n        ");
+    }
+
+    private void addSubRepository(String repository) {
+        subRepositories
+                .append(repository)
+                .append("\n        ");
+
+    }
+
 }
