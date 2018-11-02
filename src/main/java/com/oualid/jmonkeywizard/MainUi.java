@@ -12,16 +12,15 @@ import static com.oualid.jmonkeywizard.FileUtils.*;
 public class MainUi {
     private final String slash = File.separator;
     static HashMap<String, String> specialWords = new HashMap<>();
+
     @FXML
-    TextField gamePackage;
+    private TextField gamePackage, gameName, gameDirectory, jmeVersion, gradleVersion, tmpPath;
     @FXML
-    private TextField gameName, gameDirectory, jmeVersion, gradleVersion;
-    @FXML
-    private ComboBox jmeRelease, javaVersion, gradleType,kotlinVersion;
+    private ComboBox jmeRelease, javaVersion, gradleType, kotlinVersion;
     @FXML
     private RadioButton jogl, lwjgl, lwjgl3;
     @FXML
-    private CheckBox desktop, android, ios, vr, useKotlin,jBullet, bullet, jogg, plugins,
+    private CheckBox desktop, android, ios, vr, useKotlin, jBullet, bullet, jogg, plugins,
             terrain, effects, blender, niftyGUI, examples, networking, customTmp;
     @FXML
     private Button buildProject;
@@ -29,17 +28,21 @@ public class MainUi {
     private ProgressBar progressBar;
     @FXML
     private TextArea messages;
-    @FXML
-    private TextField tmpPath;
 
     private String modules;
-    private StringBuilder coreDependencies = new StringBuilder();
-    private StringBuilder desktopDependencies = new StringBuilder();
-    private StringBuilder androidDependencies = new StringBuilder();
-    private StringBuilder iosDependencies = new StringBuilder();
-    private StringBuilder vrDependencies = new StringBuilder();
-    private StringBuilder classPaths = new StringBuilder();
-    private StringBuilder repositories = new StringBuilder();
+    private StringBuilder coreDependencies;
+    private StringBuilder desktopDependencies;
+    private StringBuilder androidDependencies;
+    private StringBuilder iosDependencies;
+    private StringBuilder vrDependencies;
+    private StringBuilder classPaths;
+    private StringBuilder repositories;
+    private StringBuilder corePlugins;
+    private StringBuilder desktopPlugins;
+    private StringBuilder androidPlugins;
+    private StringBuilder iosPlugins;
+    private StringBuilder vrPlugins;
+
     private File projectDir;
 
 
@@ -61,6 +64,19 @@ public class MainUi {
 
     @FXML
     private void build() {
+        corePlugins = new StringBuilder();
+        repositories = new StringBuilder();
+        vrDependencies = new StringBuilder();
+        androidDependencies = new StringBuilder();
+        desktopDependencies = new StringBuilder();
+        classPaths = new StringBuilder();
+        iosDependencies = new StringBuilder();
+        androidPlugins = new StringBuilder();
+        desktopPlugins = new StringBuilder();
+        iosPlugins = new StringBuilder();
+        vrPlugins = new StringBuilder();
+        coreDependencies = new StringBuilder();
+
         if (projectDir.getAbsoluteFile().exists()) {
             printMessage("Directory already exist choose an other one!");
             return;
@@ -87,6 +103,18 @@ public class MainUi {
             return;
         }
 
+        addCorePlugin("java");
+        addDesktopPlugin("java");
+        addIosPlugin("java");
+        addVrPlugin("java");
+        if (useKotlin.isSelected()) {
+            addCorePlugin("kotlin");
+            addDesktopPlugin("kotlin");
+            addIosPlugin("kotlin");
+            addVrPlugin("kotlin");
+            addAndroidPlugin("kotlin-android");
+            addClasspath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version");
+        }
         addDependencies();
         specialWords.put("coreDependencies", coreDependencies.toString());
         specialWords.put("desktopDependencies", desktopDependencies.toString());
@@ -99,6 +127,13 @@ public class MainUi {
         }
         specialWords.put("classPaths", classPaths.toString());
         specialWords.put("repositories", repositories.toString());
+
+
+        specialWords.put("corePlugins", corePlugins.toString());
+        specialWords.put("desktopPlugins", desktopPlugins.toString());
+        specialWords.put("androidPlugins", androidPlugins.toString());
+        specialWords.put("iosPlugins", iosPlugins.toString());
+        specialWords.put("vrPlugins", vrPlugins.toString());
 
         addCore();
         progressBar.setProgress(10);
@@ -116,7 +151,7 @@ public class MainUi {
 
         progressBar.setProgress(80);
         createFileFromTmp(projectDir, "build.gradle", "template/build.gradle");
-        createFileFromContent(projectDir, "settings.gradle", "include 'core'," + modules);
+        createFileFromContent(projectDir, "settings.gradle", "include 'core'" + modules);
         progressBar.setProgress(100);
         printMessage("Build end");
         progressBar.setProgress(0);
@@ -196,7 +231,6 @@ public class MainUi {
         File gradleDir = newDir(projectDir.getPath() + "/gradle/wrapper");
         File assetsDir = newDir(projectDir.getPath() + "/assets");
 
-        // sub assets folders
         newDir(assetsDir.getPath() + "/Interface");
         newDir(assetsDir.getPath() + "/MatDefs");
         newDir(assetsDir.getPath() + "/Materials");
@@ -207,12 +241,11 @@ public class MainUi {
         newDir(assetsDir.getPath() + "/Textures");
 
         File coreDir = newDir(projectDir.getPath() + "/core");
-        File javaDir = newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));// core java folder
+        File javaDir = newDir(coreDir.getPath() + "/src/main/java/" + gamePackage.getText().replace(".", "/"));
 
-        createFileFromTmp(javaDir, "App.java", "template/core/Main.java");
+        createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
         createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
 
-        // make gradle wrapper files
         createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
         copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
         progressBar.setProgress(30);
@@ -451,5 +484,40 @@ public class MainUi {
         repositories
                 .append(repository)
                 .append("\n        ");
+    }
+
+    private void addCorePlugin(String plugin) {
+        corePlugins
+                .append("id \"")
+                .append(plugin)
+                .append("\"    ");
+    }
+
+    private void addDesktopPlugin(String plugin) {
+        desktopPlugins
+                .append("id \"")
+                .append(plugin)
+                .append("\"    ");
+    }
+
+    private void addAndroidPlugin(String plugin) {
+        androidPlugins
+                .append("id \"")
+                .append(plugin)
+                .append("\"    ");
+    }
+
+    private void addIosPlugin(String plugin) {
+        iosPlugins
+                .append("id \"")
+                .append(plugin)
+                .append("\"    ");
+    }
+
+    private void addVrPlugin(String plugin) {
+        vrPlugins
+                .append("id \"")
+                .append(plugin)
+                .append("\"    ");
     }
 }

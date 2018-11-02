@@ -13,5 +13,6 @@ public class AndroidLauncher extends AndroidHarness {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
     }
 }
