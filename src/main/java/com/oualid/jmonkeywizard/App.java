@@ -14,6 +14,9 @@ public class App extends Application {
     static Stage primaryStage;
     static ProjectBuilder projectBuilder;
 
+    static DependencyController dependencyUIController;
+    static DependenciesController dependenciesController;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,7 +37,7 @@ public class App extends Application {
 
             fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("gui/Dependencies.fxml").openStream());
-            DependenciesController dependenciesController = fxmlLoader.getController();
+             dependenciesController = fxmlLoader.getController();
             dependencies = new Stage();
             dependencies.setTitle("More Dependencies");
             dependencies.setResizable(true);
@@ -44,7 +47,7 @@ public class App extends Application {
 
             fxmlLoader = new FXMLLoader();
             Parent DependencyUIRoot = fxmlLoader.load(getClass().getClassLoader().getResource("gui/DependencyUI.fxml").openStream());
-            DependencyController DependencyUIController = fxmlLoader.getController();
+            dependencyUIController = fxmlLoader.getController();
             dependency = new Stage();
             dependency.setTitle("Add Dependency");
             dependency.setResizable(true);
@@ -52,7 +55,7 @@ public class App extends Application {
             dependency.setScene(new Scene(DependencyUIRoot));
             //dependency.getIcons().add(new Image("/icons/icon.png"));
 
-            projectBuilder = new ProjectBuilder(uiController,dependenciesController);
+            projectBuilder = new ProjectBuilder(uiController, dependenciesController);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,10 @@
 package com.oualid.jmonkeywizard;
 
+import javafx.scene.control.CheckBox;
+
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.oualid.jmonkeywizard.FileUtils.*;
 
@@ -85,6 +88,7 @@ class ProjectBuilder {
             addExtVar("kotlin_version = '" + mainController.kotlinVersion.getValue() + "'");
         }
         addDependencies();
+        addCustomDependencies();
         specialWords.put("coreDependencies", coreDependencies.toString());
         specialWords.put("desktopDependencies", desktopDependencies.toString());
         specialWords.put("androidDependencies", androidDependencies.toString());
@@ -292,7 +296,7 @@ class ProjectBuilder {
 
 
     private void printMessage(String message) {
-       mainController.printMessage(message);
+        mainController.printMessage(message);
     }
 
     private void addAndroidDependency(String dependency) {
@@ -389,6 +393,35 @@ class ProjectBuilder {
                 .append(repository)
                 .append("\n        ");
 
+    }
+
+    private void addCustomDependencies() {
+        for (Map.Entry<CheckBox, Dependency> entry : DependenciesController.dependencies.entrySet()) {
+            CheckBox checkBox = entry.getKey();
+            Dependency dependency = entry.getValue();
+            if (checkBox.isSelected()) {
+                if (!dependency.repository.isEmpty() && !subRepositories.toString().contains(dependency.repository))
+                    addSubRepository(dependency.repository);
+
+                switch (dependency.platform) {
+                    case ALL:
+                        addCoreDependency(dependency.group + ":" + dependency.name + ":" + dependency.version);
+                        break;
+                    case DESKTOP:
+                        addDesktopDependency(dependency.group + ":" + dependency.name + ":" + dependency.version);
+                        break;
+                    case ANDROID:
+                        addAndroidDependency(dependency.group + ":" + dependency.name + ":" + dependency.version);
+                        break;
+                    case IOS:
+                        addIosDependency(dependency.group + ":" + dependency.name + ":" + dependency.version);
+                        break;
+                    case VR:
+                        addVrDependency(dependency.group + ":" + dependency.name + ":" + dependency.version);
+                        break;
+                }
+            }
+        }
     }
 
 

@@ -5,44 +5,26 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class DependenciesController {
     @FXML
     GridPane map;
 
-    private List<Dependency> dependencies = new ArrayList<>();
+    static HashMap<CheckBox, Dependency> dependencies = new HashMap<>();
 
     @FXML
     public void initialize() {
-        dependencies.add(new Dependency("jme3-android", "org.jmonkeyengine",
-                "3.2.1-stable", "BSD New", Dependency.Platform.ANDROID));
-        dependencies.add(new Dependency("jme3-desktop", "org.jmonkeyengine",
-                "3.2.1-stable", "BSD New", Dependency.Platform.DESKTOP));
-        dependencies.add(new Dependency("jme3-ios", "org.jmonkeyengine",
-                "3.2.1-stable", "BSD New", Dependency.Platform.IOS));
+        addDependency(new Dependency("lemur", "com.simsilica",
+                "1.10.1", "BSD New", Dependency.Platform.ALL,
+                "maven { url \"https://dl.bintray.com/simsilica/Sim-tools\" }"));
 
-        dependencies.add(new Dependency("jme3-core", "org.jmonkeyengine",
-                "3.2.1-stable", "BSD New", Dependency.Platform.ALL));
-        dependencies.add(new Dependency("jme3-vr", "org.jmonkeyengine",
-                "3.2.1-stable", "BSD New", Dependency.Platform.VR));
+        addDependency(new Dependency("SkyControl", "jme3utilities",
+                "0.9.14", "BSD New", Dependency.Platform.ALL,
+                "maven { url \"https://dl.bintray.com/stephengold/jme3utilities\" }"));
 
-
-        dependencies.add(new Dependency("SkyControl", "jme3utilities",
-                "0.9.14", "BSD New", Dependency.Platform.VR));
-        dependencies.add(new Dependency("lemur", "com.simsilica",
-                "1.10.1", "BSD New", Dependency.Platform.VR));
-
-        int row = 1;
-        for (Dependency dependency : dependencies) {
-            map.add(new CheckBox(dependency.name), 0, row);
-            map.add(new Label(dependency.group), 1, row);
-            map.add(new Label(dependency.version), 2, row);
-            map.add(new Label(dependency.license), 3, row);
-            map.add(new Label(dependency.platform.name()), 4, row);
-            row++;
-        }
+        addDependency(new Dependency("jfx", "com.jme3", "2.0.0", "Apache-2.0",
+                Dependency.Platform.ALL, "maven { url \"https://dl.bintray.com/javasabr/maven\" }"));
     }
 
     @FXML
@@ -55,5 +37,16 @@ public class DependenciesController {
         App.dependency.show();
     }
 
+    void addDependency(Dependency dependency) {
+        CheckBox checkBox = new CheckBox(dependency.name);
+        dependencies.put(checkBox, dependency);
+        int row = dependencies.keySet().size();
+
+        map.add(checkBox, 0, row);
+        map.add(new Label(dependency.group), 1, row);
+        map.add(new Label(dependency.version), 2, row);
+        map.add(new Label(dependency.license), 3, row);
+        map.add(new Label(dependency.platform.name()), 4, row);
+    }
 
 }
