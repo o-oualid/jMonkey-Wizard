@@ -6,7 +6,7 @@ import javafx.stage.DirectoryChooser;
 
 import java.io.File;
 
-public class MainUi {
+public class MainUiController {
     private final String slash = File.separator;
     @FXML
     TextField gamePackage, gameName, gameDirectory, jmeVersion, gradleVersion, tmpPath;

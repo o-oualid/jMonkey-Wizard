@@ -8,10 +8,10 @@ import static com.oualid.jmonkeywizard.FileUtils.*;
 class ProjectBuilder {
     static HashMap<String, String> specialWords = new HashMap<>();
 
-    private MainUi mainController;
-    private Dependencies dependenciesController;
+    private MainUiController mainController;
+    private DependenciesController dependenciesController;
 
-    ProjectBuilder(MainUi mainController, Dependencies dependenciesController) {
+    ProjectBuilder(MainUiController mainController, DependenciesController dependenciesController) {
         this.mainController = mainController;
         this.dependenciesController = dependenciesController;
     }
@@ -162,9 +162,6 @@ class ProjectBuilder {
 
     }
 
-    /**
-     * called by {@link MainUi#build()} if {@link MainUi#desktop} is selected
-     */
 
     private void addDesktop() {
         File desktopDir = newDir(projectDir.getPath() + "/desktop");
@@ -179,9 +176,6 @@ class ProjectBuilder {
         modules = modules + ", 'desktop'";
     }
 
-    /**
-     * called by {@link MainUi#build()} if {@link MainUi#android} is selected
-     */
     private void addAndroid() {
         File androidDir = newDir(projectDir.getPath() + "/android");
         File androidMainDir = newDir(androidDir.getPath() + "/src/main");
@@ -221,9 +215,6 @@ class ProjectBuilder {
         modules = modules + ", 'android'";
     }
 
-    /**
-     * called by {@link MainUi#build()} if {@link MainUi#ios} is selected
-     */
     private void addIos() {
         File iosDir = newDir(projectDir.getPath() + "/ios");
         File javaDir = newDir(iosDir.getPath() + "/src/main/java/" + mainController.gamePackage.getText().replace(".", "/"));
@@ -237,7 +228,7 @@ class ProjectBuilder {
     }
 
     /**
-     * called by {@link MainUi#build()} if {@link MainUi#vr} is selected
+     * called by {@link MainUiController#build()} if {@link MainUiController#vr} is selected
      */
 
     private void addVr() {
@@ -252,10 +243,6 @@ class ProjectBuilder {
 
         modules = modules + ", 'vr'";
     }
-
-    /**
-     * called by {@link MainUi#build()}
-     */
 
     private void addDependencies() {
         addCoreDependency("${jme3.g}:jme3-core:${jme3.v}");

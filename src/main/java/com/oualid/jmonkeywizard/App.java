@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class App extends Application {
     static Stage dependencies;
+    static Stage dependency;
     static Stage primaryStage;
     static ProjectBuilder projectBuilder;
 
@@ -23,7 +24,7 @@ public class App extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent parent = fxmlLoader.load(getClass().getClassLoader().getResource("gui/MainUI.fxml").openStream());
-            MainUi uiController = fxmlLoader.getController();
+            MainUiController uiController = fxmlLoader.getController();
             primaryStage.setTitle("jMonkey Wizard");
             primaryStage.setScene(new Scene(parent));
             primaryStage.setResizable(false);
@@ -33,16 +34,24 @@ public class App extends Application {
 
             fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("gui/Dependencies.fxml").openStream());
-            Dependencies dependenciesController = fxmlLoader.getController();
+            DependenciesController dependenciesController = fxmlLoader.getController();
             dependencies = new Stage();
             dependencies.setTitle("More Dependencies");
-            dependencies.setResizable(false);
+            dependencies.setResizable(true);
             dependencies.initOwner(primaryStage);
             dependencies.setScene(new Scene(root));
             //dependencies.getIcons().add(new Image("/icons/icon.png"));
-            if (uiController==null){
-                System.out.println("ui controller is NULL");
-            }
+
+            fxmlLoader = new FXMLLoader();
+            Parent DependencyUIRoot = fxmlLoader.load(getClass().getClassLoader().getResource("gui/DependencyUI.fxml").openStream());
+            DependencyController DependencyUIController = fxmlLoader.getController();
+            dependency = new Stage();
+            dependency.setTitle("Add Dependency");
+            dependency.setResizable(true);
+            dependency.initOwner(dependencies);
+            dependency.setScene(new Scene(DependencyUIRoot));
+            //dependency.getIcons().add(new Image("/icons/icon.png"));
+
             projectBuilder = new ProjectBuilder(uiController,dependenciesController);
         } catch (IOException e) {
             e.printStackTrace();
