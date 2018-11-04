@@ -1,6 +1,6 @@
 package com.oualid.jmonkeywizard;
 
-class Dependency {
+class Dependency implements java.io.Serializable {
     String name;
     String group;
     String version;

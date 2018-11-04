@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class App extends Application {
+    //TODO: find better names this is confusing
+
     static Stage dependencies;
     static Stage dependency;
     static Stage primaryStage;
@@ -37,12 +39,13 @@ public class App extends Application {
 
             fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("gui/Dependencies.fxml").openStream());
-             dependenciesController = fxmlLoader.getController();
+            dependenciesController = fxmlLoader.getController();
             dependencies = new Stage();
             dependencies.setTitle("More Dependencies");
             dependencies.setResizable(true);
             dependencies.initOwner(primaryStage);
             dependencies.setScene(new Scene(root));
+            dependencies.setResizable(false);
             //dependencies.getIcons().add(new Image("/icons/icon.png"));
 
             fxmlLoader = new FXMLLoader();
@@ -51,6 +54,7 @@ public class App extends Application {
             dependency = new Stage();
             dependency.setTitle("Add Dependency");
             dependency.setResizable(true);
+            dependency.setResizable(false);
             dependency.initOwner(dependencies);
             dependency.setScene(new Scene(DependencyUIRoot));
             //dependency.getIcons().add(new Image("/icons/icon.png"));

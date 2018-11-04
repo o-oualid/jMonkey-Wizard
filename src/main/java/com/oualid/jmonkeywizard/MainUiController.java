@@ -41,15 +41,17 @@ public class MainUiController {
 
     @FXML
     private void build() {
+        if (projectDir.getAbsoluteFile().exists()) {
+            printMessage("Directory already exist please choose an other one");
+            return;
+        }
+
         App.projectBuilder.build();
     }
 
 
     @FXML
     private void update() {
-        if (projectDir.getAbsoluteFile().exists()) buildProject.setDisable(true);
-        else buildProject.setDisable(false);
-
         if (gameName.getText().isEmpty()) buildProject.setDisable(true);
         else buildProject.setDisable(false);
 
