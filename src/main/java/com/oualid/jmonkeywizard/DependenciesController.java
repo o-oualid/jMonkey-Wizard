@@ -102,8 +102,7 @@ public class DependenciesController {
 
     @FXML
     private void edit(int index) {
-        App.dependencyUIController.index = index;
-        App.dependencyUIController.init(dependencies.get(index));
+        App.dependencyUIController.init(dependencies.get(index), index);
         App.dependency.show();
     }
 

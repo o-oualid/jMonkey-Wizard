@@ -14,14 +14,14 @@ public class DependencyController {
 
     int index = -1;
 
-    void init(Dependency dependency) {
+    void init(Dependency dependency, int index) {
+        this.index = index;
         name.setText(dependency.name);
         group.setText(dependency.group);
         version.setText(dependency.version);
         licence.setText(dependency.license);
         repository.setText(dependency.repository);
         platform.setValue(dependency.platform.toString());
-
     }
 
 
