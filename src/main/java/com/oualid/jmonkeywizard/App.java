@@ -4,19 +4,20 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class App extends Application {
     //TODO: find better names this is confusing
+    static ProjectBuilder projectBuilder;
 
     static Stage dependencies;
     static Stage dependency;
     static Stage primaryStage;
-    static ProjectBuilder projectBuilder;
 
-    static DependencyController dependencyUIController;
+    static DependencyController dependencyController;
     static DependenciesController dependenciesController;
 
     public static void main(String[] args) {
@@ -28,12 +29,12 @@ public class App extends Application {
         App.primaryStage = primaryStage;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent parent = fxmlLoader.load(getClass().getClassLoader().getResource("gui/MainUI.fxml").openStream());
+            Parent parent = fxmlLoader.load(getClass().getClassLoader().getResource("gui/Main.fxml").openStream());
             MainUiController uiController = fxmlLoader.getController();
             primaryStage.setTitle("jMonkey Wizard");
             primaryStage.setScene(new Scene(parent));
             primaryStage.setResizable(false);
-            //primaryStage.getIcons().add(new Image("/icons/icon.png"));
+            primaryStage.getIcons().add(new Image("icons/icon.png"));
             primaryStage.show();
             // primaryStage.setAlwaysOnTop(true);
 
@@ -46,20 +47,20 @@ public class App extends Application {
             dependencies.initOwner(primaryStage);
             dependencies.setScene(new Scene(root));
             dependencies.setResizable(false);
-            //dependencies.getIcons().add(new Image("/icons/icon.png"));
+            dependencies.getIcons().add(new Image("icons/icon.png"));
 
             fxmlLoader = new FXMLLoader();
-            Parent DependencyUIRoot = fxmlLoader.load(getClass().getClassLoader().getResource("gui/DependencyUI.fxml").openStream());
-            dependencyUIController = fxmlLoader.getController();
+            Parent DependencyUIRoot = fxmlLoader.load(getClass().getClassLoader().getResource("gui/Dependency.fxml").openStream());
+            dependencyController = fxmlLoader.getController();
             dependency = new Stage();
-            dependency.setTitle("Add Dependency");
+            dependency.setTitle("Dependency");
             dependency.setResizable(true);
             dependency.setResizable(false);
             dependency.initOwner(dependencies);
             dependency.setScene(new Scene(DependencyUIRoot));
-            //dependency.getIcons().add(new Image("/icons/icon.png"));
+            dependency.getIcons().add(new Image("icons/icon.png"));
 
-            projectBuilder = new ProjectBuilder(uiController, dependenciesController);
+            projectBuilder = new ProjectBuilder(uiController);
         } catch (IOException e) {
             e.printStackTrace();
         }

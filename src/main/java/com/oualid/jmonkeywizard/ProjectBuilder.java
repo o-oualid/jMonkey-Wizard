@@ -9,11 +9,9 @@ class ProjectBuilder {
     static HashMap<String, String> specialWords = new HashMap<>();
 
     private MainUiController mainController;
-    private DependenciesController dependenciesController;
 
-    ProjectBuilder(MainUiController mainController, DependenciesController dependenciesController) {
+    ProjectBuilder(MainUiController mainController) {
         this.mainController = mainController;
-        this.dependenciesController = dependenciesController;
     }
 
     private String modules;

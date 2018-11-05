@@ -28,7 +28,7 @@ public class DependenciesController {
 
     @FXML
     void addCustomDependency() {
-        App.dependencyUIController.index = -1;
+        App.dependencyController.index = -1;
         App.dependency.show();
     }
 
@@ -102,7 +102,7 @@ public class DependenciesController {
 
     @FXML
     private void edit(int index) {
-        App.dependencyUIController.init(dependencies.get(index), index);
+        App.dependencyController.init(dependencies.get(index), index);
         App.dependency.show();
     }
 
