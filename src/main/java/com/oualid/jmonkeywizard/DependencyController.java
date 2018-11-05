@@ -24,6 +24,7 @@ public class DependencyController {
 
     }
 
+
     @FXML
     public void initialize() {
 
@@ -39,12 +40,23 @@ public class DependencyController {
             App.dependenciesController.refreshMap();
         }
         App.dependency.hide();
+        clear();
+    }
+
+    private void clear() {
         index = -1;
+        name.setText("");
+        group.setText("");
+        version.setText("");
+        licence.setText("");
+        repository.setText("");
+        platform.setValue("ALL");
     }
 
     @FXML
     void cancel() {
         App.dependency.hide();
+        clear();
     }
 
 }
