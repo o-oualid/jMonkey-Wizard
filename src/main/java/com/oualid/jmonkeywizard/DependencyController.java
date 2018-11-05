@@ -6,10 +6,23 @@ import javafx.scene.control.TextField;
 
 
 public class DependencyController {
+
     @FXML
     public TextField name, group, version, licence, repository;
     @FXML
     ComboBox platform;
+
+    int index = -1;
+
+    void init(Dependency dependency) {
+        name.setText(dependency.name);
+        group.setText(dependency.group);
+        version.setText(dependency.version);
+        licence.setText(dependency.license);
+        repository.setText(dependency.repository);
+        platform.setValue(dependency.platform.toString());
+
+    }
 
     @FXML
     public void initialize() {
@@ -18,10 +31,15 @@ public class DependencyController {
 
     @FXML
     void ok() {
-        App.dependenciesController.addDependency(
-                new Dependency(name.getText(), group.getText(), version.getText(), licence.getText(),
-                        Dependency.Platform.valueOf(platform.getValue().toString()), repository.getText()));
+        Dependency dependency = new Dependency(name.getText(), group.getText(), version.getText(), licence.getText(),
+                Dependency.Platform.valueOf(platform.getValue().toString()), repository.getText());
+        if (index == -1) App.dependenciesController.addDependency(dependency);
+        else {
+            App.dependenciesController.dependencies.set(index, dependency);
+            App.dependenciesController.refreshMap();
+        }
         App.dependency.hide();
+        index = -1;
     }
 
     @FXML
