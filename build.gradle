@@ -24,38 +24,6 @@ jar {
     manifest {
         attributes 'Main-Class': 'com.oualid.jmonkeywizard.Main'
     }
-    baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
-compileJava {
-    doFirst {
-
-        options.compilerArgs = [
-                '--module-path', classpath.asPath,
-                '--add-modules', 'javafx.controls',
-                '--add-modules', 'javafx.graphics',
-                '--add-exports', 'javafx.graphics/com.sun.javafx.util=ALL-UNNAMED',
-                '--add-exports', 'javafx.base/com.sun.javafx.reflect=ALL-UNNAMED',
-                '--add-exports', 'javafx.base/com.sun.javafx.beans=ALL-UNNAMED',
-                '--add-exports', 'javafx.graphics/com.sun.glass.utils=ALL-UNNAMED',
-                '--add-exports', 'javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED'
-        ]
-    }
-}
-
-run {
-    doFirst {
-        jvmArgs = [
-                '--module-path', classpath.asPath,
-                '--add-modules', 'javafx.controls',
-                '--add-modules', 'javafx.graphics',
-                '--add-exports', 'javafx.graphics/com.sun.javafx.util=ALL-UNNAMED',
-                '--add-exports', 'javafx.base/com.sun.javafx.reflect=ALL-UNNAMED',
-                '--add-exports', 'javafx.base/com.sun.javafx.beans=ALL-UNNAMED',
-                '--add-exports', 'javafx.graphics/com.sun.glass.utils=ALL-UNNAMED',
-                '--add-exports', 'javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED'
-        ]
-    }
-}
-
-mainClassName = "com.oualid.jmonkeywizard.App"
+mainClassName = "com.oualid.jmonkeywizard.Main"
