@@ -53,7 +53,6 @@ class ProjectBuilder {
         subRepositories = new StringBuilder();
 
         printMessage("Build started");
-
         modules = "";
         specialWords.put("package", mainController.gamePackage.getText());
         specialWords.put("gameName", mainController.gameName.getText());
@@ -68,6 +67,9 @@ class ProjectBuilder {
             mainController.progressBar.setProgress(0);
             return;
         }
+        projectDir = newDir(mainController.projectDir.getPath());
+        addAssetFolders();
+        addGeneralGradleFiles();
 
         addCorePlugin("java");
         addDesktopPlugin("java");
@@ -130,11 +132,8 @@ class ProjectBuilder {
     }
 
 
-    private void addCore() {
-        projectDir = newDir(mainController.projectDir.getPath());
-        File gradleDir = newDir(projectDir.getPath() + "/gradle/wrapper");
+    private void addAssetFolders() {
         File assetsDir = newDir(projectDir.getPath() + "/assets");
-
         newDir(assetsDir.getPath() + "/Interface");
         newDir(assetsDir.getPath() + "/MatDefs");
         newDir(assetsDir.getPath() + "/Materials");
@@ -143,7 +142,20 @@ class ProjectBuilder {
         newDir(assetsDir.getPath() + "/Shaders");
         newDir(assetsDir.getPath() + "/Sounds");
         newDir(assetsDir.getPath() + "/Textures");
+    }
 
+
+    private void addGeneralGradleFiles() {
+        File gradleDir = newDir(projectDir.getPath() + "/gradle/wrapper");
+        createFileFromTmp(gradleDir, "gradle-wrapper.properties",
+                "template/gradle/wrapper/gradle-wrapper.properties");
+        copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
+        copyFile("template/gradlew", projectDir.getPath() + "/gradlew");
+        copyFile("template/gradlew.bat", projectDir.getPath() + "/gradlew.bat");
+
+    }
+
+    private void addCore() {
         File coreDir = newDir(projectDir.getPath() + "/core");
 
         createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
@@ -154,10 +166,6 @@ class ProjectBuilder {
             createFileFromTmp(kotlinDir, "Main.kt", "template/core/Main.kt");
         } else
             createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
-
-
-        createFileFromTmp(gradleDir, "gradle-wrapper.properties", "template/gradle/wrapper/gradle-wrapper.properties");
-        copyFile("template/gradle/wrapper/gradle-wrapper.jar", gradleDir + "/gradle-wrapper.jar");
 
     }
 
