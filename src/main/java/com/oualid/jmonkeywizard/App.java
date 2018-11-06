@@ -20,8 +20,7 @@ public class App extends Application {
     static DependencyController dependencyController;
     static DependenciesController dependenciesController;
 
-    public static void main(String[] args) {
-
+    public static void start(String[] args) {
             launch(args);
     }
 
