@@ -157,36 +157,40 @@ class ProjectBuilder {
 
     private void addCore() {
         File coreDir = newDir(projectDir.getPath() + "/core");
-
         createFileFromTmp(coreDir, "build.gradle", "template/core/build.gradle");
-        File javaDir = newDir(coreDir.getPath() + "/src/start/java/" + mainController.gamePackage.getText().replace(".", "/"));
 
         if (mainController.useKotlin.isSelected()) {
-            File kotlinDir = newDir(coreDir.getPath() + "/src/start/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
-            createFileFromTmp(kotlinDir, "Main.kt", "template/core/Main.kt");
-        } else
-            createFileFromTmp(javaDir, "Main.java", "template/core/Main.java");
-
+            File mainKotlinDir = newDir(coreDir.getPath() + "/src/main/kotlin/"
+                    + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(coreDir.getPath() + "/src/test/kotlin");
+            createFileFromTmp(mainKotlinDir, "Main.kt", "template/core/Main.kt");
+        } else {
+            File mainDir = newDir(coreDir.getPath() + "/src/main/java/"
+                    + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(coreDir.getPath() + "/src/test/java");
+            createFileFromTmp(mainDir, "Main.java", "template/core/Main.java");
+        }
     }
 
 
     private void addDesktop() {
         File desktopDir = newDir(projectDir.getPath() + "/desktop");
-        File javaDir = newDir(desktopDir.getPath() + "/src/start/java/" + mainController.gamePackage.getText().replace(".", "/"));
         if (mainController.useKotlin.isSelected()) {
-            File kotlinDir = newDir(desktopDir.getPath() + "/src/start/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            File kotlinDir = newDir(desktopDir.getPath() + "/src/main/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(desktopDir.getPath() + "/src/test/kotlin");
             createFileFromTmp(kotlinDir, "DesktopLauncher.kt", "template/desktop/DesktopLauncher.kt");
-        } else
+        } else {
+            File javaDir = newDir(desktopDir.getPath() + "/src/main/java/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(desktopDir.getPath() + "/src/test/java");
             createFileFromTmp(javaDir, "DesktopLauncher.java", "template/desktop/DesktopLauncher.java");
-
+        }
         createFileFromTmp(desktopDir, "build.gradle", "template/desktop/build.gradle");
         modules = modules + ", 'desktop'";
     }
 
     private void addAndroid() {
         File androidDir = newDir(projectDir.getPath() + "/android");
-        File androidMainDir = newDir(androidDir.getPath() + "/src/start");
-        File javaDir = newDir(androidMainDir.getPath() + "/java/" + mainController.gamePackage.getText().replace(".", "/"));
+        File androidMainDir = newDir(androidDir.getPath() + "/src/main");
         File androidRes = newDir(androidMainDir + "/res");
         File hdpi = newDir(androidRes.getPath() + "/mipmap-hdpi");
         File mdpi = newDir(androidRes.getPath() + "/mipmap-mdpi");
@@ -197,11 +201,13 @@ class ProjectBuilder {
 
         if (mainController.useKotlin.isSelected()) {
             File kotlinDir = newDir(androidMainDir.getPath() + "/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(androidDir.getPath() + "/src/test/kotlin");
             createFileFromTmp(kotlinDir, "AndroidLauncher.kt", "template/android/AndroidLauncher.kt");
-
-        } else
+        } else {
+            File javaDir = newDir(androidMainDir.getPath() + "/java/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(androidDir.getPath() + "/src/test/java");
             createFileFromTmp(javaDir, "AndroidLauncher.java", "template/android/AndroidLauncher.java");
-
+        }
         createFileFromTmp(androidValues, "strings.xml", "template/android/res/values/strings.xml");
         createFileFromTmp(androidValues, "colors.xml", "template/android/res/values/colors.xml");
         createFileFromTmp(androidValues, "styles.xml", "template/android/res/values/styles.xml");
@@ -224,12 +230,18 @@ class ProjectBuilder {
 
     private void addIos() {
         File iosDir = newDir(projectDir.getPath() + "/ios");
-        File javaDir = newDir(iosDir.getPath() + "/src/start/java/" + mainController.gamePackage.getText().replace(".", "/"));
+
         if (mainController.useKotlin.isSelected()) {
-            File kotlinDir = newDir(iosDir.getPath() + "/src/start/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            File kotlinDir = newDir(iosDir.getPath() + "/src/main/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(iosDir.getPath() + "/src/test/kotlin");
+
             createFileFromTmp(kotlinDir, "IosLauncher.kt", "template/ios/IosLauncher.kt");
-        } else
+        } else {
+            File javaDir = newDir(iosDir.getPath() + "/src/main/java/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(iosDir.getPath() + "/src/test/java");
             createFileFromTmp(javaDir, "IosLauncher.java", "template/ios/IosLauncher.java");
+
+        }
         createFileFromTmp(iosDir, "build.gradle", "template/ios/build.gradle");
         modules = modules + ", 'ios'";
     }
@@ -240,12 +252,18 @@ class ProjectBuilder {
 
     private void addVr() {
         File vrDir = newDir(projectDir.getPath() + "/vr");
-        File javaDir = newDir(vrDir.getPath() + "/src/start/java/" + mainController.gamePackage.getText().replace(".", "/"));
 
         if (mainController.useKotlin.isSelected()) {
-            File kotlinDir = newDir(vrDir.getPath() + "/src/start/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            File kotlinDir = newDir(vrDir.getPath() + "/src/main/kotlin/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(vrDir.getPath() + "/src/test/kotlin");
+
             createFileFromTmp(kotlinDir, "VrLauncher.kt", "template/vr/VrLauncher.kt");
-        } else createFileFromTmp(javaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
+        } else {
+            File javaDir = newDir(vrDir.getPath() + "/src/main/java/" + mainController.gamePackage.getText().replace(".", "/"));
+            newDir(vrDir.getPath() + "/src/test/java");
+
+            createFileFromTmp(javaDir, "VrLauncher.java", "template/vr/VrLauncher.java");
+        }
         createFileFromTmp(vrDir, "build.gradle", "template/vr/build.gradle");
 
         modules = modules + ", 'vr'";
