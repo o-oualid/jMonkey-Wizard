@@ -1,29 +1,35 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
+ext {
+    jfx = '11.0.2'
+    platform = 'win'// linux , win or mac
+}
 repositories {
     mavenCentral()
 }
 dependencies {
-    compile "org.openjfx:javafx-base:11:linux"
-    compile "org.openjfx:javafx-graphics:11:linux"
-    compile "org.openjfx:javafx-controls:11:linux"
-    compile "org.openjfx:javafx-fxml:11:linux"
-
-    compile "org.openjfx:javafx-base:11:win"
-    compile "org.openjfx:javafx-graphics:11:win"
-    compile "org.openjfx:javafx-controls:11:win"
-    compile "org.openjfx:javafx-fxml:11:win"
-
-    compile "org.openjfx:javafx-base:11:mac"
-    compile "org.openjfx:javafx-graphics:11:mac"
-    compile "org.openjfx:javafx-controls:11:mac"
-    compile "org.openjfx:javafx-fxml:11:mac"
+    compile "org.openjfx:javafx-base:$jfx:$platform"
+    compile "org.openjfx:javafx-graphics:$jfx:$platform"
+    compile "org.openjfx:javafx-controls:$jfx:$platform"
+    compile "org.openjfx:javafx-fxml:$jfx:$platform"
+}
+ext.moduleName = 'com.oualid.jmonkeywizard'
+compileJava {
+    inputs.property('moduleName', moduleName)
+    doFirst {
+        options.compilerArgs = [
+                '--module-path', classpath.asPath
+        ]
+        classpath = files()
+    }
 }
 jar {
+    archivesBaseName = "jmonkeywizard-$platform"
     manifest {
         attributes 'Main-Class': 'com.oualid.jmonkeywizard.Main'
     }
+
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 mainClassName = "com.oualid.jmonkeywizard.Main"

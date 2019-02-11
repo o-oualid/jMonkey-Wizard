@@ -1,27 +1,29 @@
 package com.oualid.jmonkeywizard;
 
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App extends Application {
-    //TODO: find better names this is confusing
     static ProjectBuilder projectBuilder;
 
     static Stage dependencies;
     static Stage dependency;
+    private List<String> list = new ArrayList<>();
     static Stage primaryStage;
 
     static DependencyController dependencyController;
     static DependenciesController dependenciesController;
 
-    public static void start(String[] args) {
-            launch(args);
+    static void startApp(String[] args) {
+        launch(args);
     }
 
     @Override

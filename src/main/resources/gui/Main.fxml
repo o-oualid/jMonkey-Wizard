@@ -35,7 +35,7 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="137.0" />
             </columnConstraints>
             <children>
-                <TextField fx:id="jmeVersion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#update" prefHeight="33.0" prefWidth="171.0" text="3.2.1" />
+                <TextField fx:id="jmeVersion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#update" prefHeight="33.0" prefWidth="171.0" text="3.2.2" />
                 <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="155.0" text="Release:" textAlignment="RIGHT" GridPane.columnIndex="1" />
                 <ComboBox fx:id="jmeRelease" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2">
                     <items>
