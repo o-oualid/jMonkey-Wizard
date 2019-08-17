@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 ext {
     jfx = '11.0.2'
-    platform = 'linux'// linux , win or mac
+    platform = 'win'// linux , win or mac
 }
 repositories {
     mavenCentral()
